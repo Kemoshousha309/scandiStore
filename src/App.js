@@ -1,0 +1,18 @@
+import { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import style from './App.module.scss';
+import Layout from './Layout/Layout';
+
+
+
+class App extends Component {
+  render () {
+    return (
+      <BrowserRouter>
+         <Layout />
+      </BrowserRouter>
+    )
+  }
+}
+
+export default App;

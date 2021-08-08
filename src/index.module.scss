@@ -1,0 +1,44 @@
+@import "./global_styles.scss";
+
+
+html {
+  font-size: 62.5%;
+
+
+
+  // Breakboints =>
+  @media only screen and (max-width: $desktop_larg) {
+    font-size: 58.5%;
+  }
+  @media only screen and (max-width: $desktop_small) {
+    font-size: 54.5%;
+  }
+  @media only screen and (max-width: $taplet_larg) {
+    font-size: 50.5%;
+  }
+  @media only screen and (max-width: $taplet_small) {
+    font-size: 46.5%;
+  }
+  @media only screen and (max-width: $phone_larg) {
+    font-size: 42.5%;
+  }
+  @media only screen and (max-width: $phone_small) {
+    font-size: 38.5%;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  font-family: "Raleway", sans-serif;
+  // font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
