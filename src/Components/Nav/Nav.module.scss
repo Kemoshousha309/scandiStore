@@ -1,10 +1,12 @@
-@import "../global_styles.scss";
+@import "../../global_styles.scss";
 
 .Nav {
     display: flex;
     justify-content: space-between;
     height: 8rem;
     align-items: center;
+    position: relative;
+    background-color: white;
 
 
     .NavCategories{
@@ -45,4 +47,44 @@
         }
     }
 
+
+
+    .NavOptoins {
+        display: flex;
+
+        div:not(:last-child){
+            margin-right: 4rem;
+        }
+
+        .Currency {
+            appearance: none;
+            background-color: transparent;
+            width: 3rem;
+            border: none;
+            overflow: hidden;
+            
+            
+            &:focus-visible {
+                outline: none !important;
+            }
+        }
+
+        
+        .Cheveron {
+            position: absolute;
+            top: 2px;
+            right: 0;
+            z-index: -1;
+        }
+        
+        .Optoin{
+            position: relative;
+            svg{
+                cursor: pointer;
+            }
+        }
+    }
+
 }
+
+

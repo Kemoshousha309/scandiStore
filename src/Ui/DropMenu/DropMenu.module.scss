@@ -1,0 +1,41 @@
+.Container {
+    position: relative;
+    margin: 0 !important;
+    
+
+    .Menu {
+        position: absolute;
+        top:  2.5rem;
+        margin: 0;
+        list-style: none;
+        background-color: white;
+        width: fit-content;
+        white-space: nowrap;
+        overflow: hidden;
+        transition: all .4s;
+        z-index: 5;
+
+        .Item {
+            padding: 1rem 0;
+        }
+    }
+}
+
+
+.right {
+    right: 0;
+}
+
+.left {
+    left: 0;
+}
+
+.close {
+    max-height: 0;
+    padding: 0 1.5rem;
+}
+
+.open {
+    padding: 1.5rem 1.5rem;
+    max-height: 30rem;
+}
