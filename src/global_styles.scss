@@ -21,3 +21,47 @@ $taplet_larg: 800px;
 $taplet_small: 600px;
 $phone_larg: 400px;
 $phone_small: 300px;
+
+
+///////////////////////////////////////
+//////////  BUTTONS
+//////////////////////////////////////
+
+
+
+
+@mixin btn {
+    padding: 1rem 2rem;
+    border: none;
+    font-family: inherit;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .1s;
+}
+
+@mixin btn-outline {
+    background-color: white;
+    color: $black_color;
+    border: 1px solid $black_color;
+    
+    &:hover {
+        background-color: #cacaca;
+    }
+    
+}
+
+
+@mixin btn-primary {
+    background-color: $primary_color;
+    color: white;
+    border: 1px solid $primary_color;
+
+    &:hover {
+        background-color: #78ca8f;
+    }
+    
+    &:active {
+        background-color: $primary_color;
+    }
+    
+}

@@ -1,0 +1,68 @@
+@import "../../../global_styles.scss";
+
+.Container {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 3.5rem;
+    
+    
+    .Left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        
+        .Name{
+            font-weight: 500;
+        }
+        
+        .Cat {
+            
+        }
+        
+        .Price {
+            font-weight: 500;
+        }
+        
+        .Sizes {
+            display: flex;
+
+            div:last-of-type{
+                margin-left: -3rem;
+                @media only screen and (max-width: $phone_larg) {
+                    margin-left: -1rem;
+                  }
+
+                @media only screen and (max-width: $phone_larg) {
+                margin-left: 0rem;
+                }
+            }
+        }
+    }
+    
+    
+    .Right {
+        display: flex;
+        
+        .AmountSec {
+            margin-right: 1rem !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            
+            .Amount {
+                font-weight: 500;
+            }
+
+        }
+        
+        .ImgWrapper {
+            img {
+                height: 12rem;
+                width: 10rem;
+            }
+        }
+    }
+}

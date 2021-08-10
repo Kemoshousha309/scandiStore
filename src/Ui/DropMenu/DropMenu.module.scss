@@ -37,5 +37,26 @@
 
 .open {
     padding: 1.5rem 1.5rem;
-    max-height: 30rem;
+    max-height: 70rem;
+    overflow-y: scroll !important;
+
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: #dfe1f300;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgb(182, 182, 182);
+        border-radius: 5px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+  
 }

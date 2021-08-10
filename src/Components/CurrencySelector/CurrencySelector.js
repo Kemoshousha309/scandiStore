@@ -3,8 +3,7 @@ import style from "./CurrencySelector.module.scss";
 import Icon from "../../Ui/Icon";
 import Backdrop from "../../Ui/Backdrop/Backdrop";
 import Aux from "../../hoc/Aux"
-import axios from "../../axois"
-import { symbol } from "prop-types";
+import { connect } from "react-redux";
 
 // This is a custom component to select the currency
 
@@ -23,26 +22,6 @@ class CurrencySelector extends Component {
         this.close()
     }
 
-    componentDidMount () {
-
-        const CURRENCY_QUERY = `
-        {
-            currencies
-          }
-        `
-
-        axios({
-            url:"",
-            method: "POST",
-            data: {
-                query: CURRENCY_QUERY
-            }
-        })
-        .then(res => {
-            this.setState({currencies: res.data.data.currencies})
-        })
-        .catch(err => console.log(err))
-    }
 
     render () {
         let openStyle = style.hide;
@@ -58,7 +37,7 @@ class CurrencySelector extends Component {
 
         let content  = <p>loading ...</p>
 
-        const currencies = this.state.currencies;
+        const currencies = this.props.currencies;
         if(currencies){ 
             content = (
                 <Aux>
@@ -97,4 +76,13 @@ const mapSymbol = (c) => {
 }
 
 
-export default CurrencySelector;
+const mapStateToProps = state => {
+    return {
+        currencies: state.currencies
+    }
+  }
+  
+
+  
+  export default connect(mapStateToProps, null)(CurrencySelector);
+  

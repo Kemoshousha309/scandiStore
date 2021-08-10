@@ -1,59 +1,70 @@
 import { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './App.module.scss';
+import CategoryPage from './Components/CategoryPage/CategoryPage';
 import Nav from './Components/Nav/Nav';
-import Backdrop from './Ui/Backdrop/Backdrop';
+import { req_categories, req_currencies, set_loading } from './store/actions';
+import Spinner from './Ui/Spinner/Spinner';
 
 
+
+// resturcture the app component
 class App extends Component {
-
-  state = {
-    cartMenuOpen: false,
-    currencyMenuOpen: false,
-    BackdropOpen: false,
-  }
-
-  optionClickHandler = (e, id) => {
-    switch (id) {
-      case "cart":
-        this.setState({cartMenuOpen: !this.state.cartMenuOpen, BackdropOpen: !this.state.BackdropOpen})
-        break
-      
-      case "currency":
-        this.setState({currencyMenuOpen: !this.state.currencyMenuOpen, BackdropOpen: !this.state.BackdropOpen})
-        break
-      default:
-        break;
-    }
-  }
-
-  BackdropClickedHandler = () => {
-    this.setState({
-      currencyMenuOpen: false,
-      cartMenuOpen: false, 
-      BackdropOpen: false
-    })
+  
+  componentDidMount() {
+      this.props.onLoadApp()
   }
 
   render () {
-    return (
-      <BrowserRouter>
-          <div className={style.Container}>   
-                <header>
-                    <Nav 
-                      cartMenuOpen={this.state.cartMenuOpen}
-                      currencyMenuOpen={this.state.currencyMenuOpen}
-                      optionClickHandler={this.optionClickHandler}
-                    />
-                </header>
-                <main>
-                    <Backdrop clicked={this.BackdropClickedHandler} open={this.state.BackdropOpen} color="#39374838" />
-                    <div style={{height: "20rem"}}></div>
-                </main>
-            </div>
-      </BrowserRouter>
+
+    // make a spinner ..
+    let content = <Spinner />
+
+    const stateContent = [
+      this.props.categories,
+      this.props.currencies,
+      
+    ]
+
+    if(stateContent.every(i => i)){
+      content =  (
+        <div className={style.Container}>   
+              <header>
+                  <Nav />
+              </header>
+              <main>
+              <Switch>
+                {this.props.categories.map(i => {
+                  return <Route path={`/${i.name}`}><CategoryPage catName={i.name} /> </Route>
+                })}
+                 <Redirect from="/" exact to={`/${this.props.categories[0].name}`} />
+              </Switch>
+              </main>
+          </div>
     )
+    }
+    return content;
   }
 }
 
-export default App;
+
+
+const mapStateToProps = state => {
+  return {
+      currencies: state.currencies,
+      categories: state.categories
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLoadApp: () => {
+      dispatch(req_currencies())
+      dispatch(req_categories())
+    }
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
