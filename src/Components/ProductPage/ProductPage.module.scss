@@ -1,0 +1,108 @@
+@import "../../global_styles.scss";
+
+.Container{
+    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    .Left {
+        display: flex;
+        flex-wrap: wrap;
+
+        .MainImg {
+            width: 50rem;
+            height: 50rem;
+            margin:0 5rem;
+            @media only screen and (max-width: $taplet_larg) {
+                width: 85%;
+                height: auto;
+                margin: 0 auto;
+                order: 0;
+            }
+
+        }   
+
+        .ImgContainer {
+            display: flex;
+            flex-direction: column;
+            @media only screen and (max-width: $taplet_larg) {
+                order: 1;
+                flex-direction: row;
+                justify-content: space-around;
+                margin: 2rem auto;
+                flex-wrap: wrap;
+            }
+            .Img {
+
+                width: 10rem;
+                height: 10rem;
+                margin-bottom: 2px;
+                &:not(:last-child) {
+                    margin-right: 2px;
+                }
+
+                
+            }
+        }
+
+    }
+
+
+    .Right {
+        // margin-left: 5rem;
+        // @media only screen and (max-width: 1285px) {
+        //     margin-left: 0rem;
+        // }
+
+        .Header {
+            margin-bottom: 3rem;
+            h1 {
+                font-weight: 400;
+                margin-bottom: 1rem;
+            }
+
+        }
+
+        .Sizes {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 3rem;
+            span {
+                font-weight: 600;
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+            }
+
+            div {
+                display: flex;
+
+                div{
+                    margin-right: 1rem;
+                }
+            }
+        }
+
+        .Price {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 3rem;
+            span:first-of-type {
+                margin-bottom: 1rem;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            span:last-of-type {
+                font-weight: bolder;
+                font-family: "Roboto", sans-serif;
+            }
+
+        }
+
+        .Description {
+            margin-top: 5rem;
+            max-width: 50rem;
+        }
+    }
+
+
+}

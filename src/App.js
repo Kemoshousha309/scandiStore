@@ -4,12 +4,13 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './App.module.scss';
 import CategoryPage from './Components/CategoryPage/CategoryPage';
 import Nav from './Components/Nav/Nav';
-import { req_categories, req_currencies, set_loading } from './store/actions';
+import ProductPage from './Components/ProductPage/ProductPage';
+import { req_categories, req_currencies, req_products } from './store/actions';
 import Spinner from './Ui/Spinner/Spinner';
 
 
 
-// resturcture the app component
+
 class App extends Component {
   
   componentDidMount() {
@@ -18,12 +19,12 @@ class App extends Component {
 
   render () {
 
-    // make a spinner ..
     let content = <Spinner />
 
     const stateContent = [
       this.props.categories,
       this.props.currencies,
+      this.props.products
       
     ]
 
@@ -36,8 +37,9 @@ class App extends Component {
               <main>
               <Switch>
                 {this.props.categories.map(i => {
-                  return <Route path={`/${i.name}`}><CategoryPage catName={i.name} /> </Route>
+                  return <Route key={i.name} path={`/${i.name}`}><CategoryPage products={this.props.products} catName={i.name} /> </Route>
                 })}
+                <Route path="/product" component={ProductPage} />
                  <Redirect from="/" exact to={`/${this.props.categories[0].name}`} />
               </Switch>
               </main>
@@ -53,7 +55,8 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
       currencies: state.currencies,
-      categories: state.categories
+      categories: state.categories,
+      products: state.products
   }
 }
 
@@ -62,6 +65,7 @@ const mapDispatchToProps = dispatch => {
     onLoadApp: () => {
       dispatch(req_currencies())
       dispatch(req_categories())
+      dispatch(req_products())
     }
   }
 }

@@ -4,6 +4,9 @@ import * as queries from "./queries";
 
 const set_currencies = (curs) => ({type: actionTypes.SET_CURRENCIES, currencies: curs})
 const set_categories = (cats) => ({type: actionTypes.SET_CATEGORIES, categories: cats})
+const set_products = (products) => ({type: actionTypes.SET_PRODUCTS, products: products})
+export const set_currency = (cur) => ({type: actionTypes.SET_CURRENCY, currency: cur})
+
 
 
 export const req_currencies = () => {
@@ -33,3 +36,17 @@ export const req_categories = () => {
         .catch(err => console.log(err.response))
     }
 }   
+
+export const req_products = () => {
+    return (dispatch) => {
+        axios({
+            data: {
+                query: queries.PRODUCTS_QUERY
+            }
+        })
+        .then(res => {
+            dispatch(set_products(res.data.data.categories))
+        })
+        .catch(err => console.log(err.response))
+    }
+} 

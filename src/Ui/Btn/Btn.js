@@ -11,9 +11,12 @@ class Btn extends Component {
         if(this.props.type === "amount"){
             classes[2] = style.Amount
         }
-
+        let inlineStyle = {}
+        if(this.props.width){
+            inlineStyle.width = this.props.width
+        }
         return(
-            <button className={classes.join(" ")}>{this.props.children}</button>
+            <button style={inlineStyle} className={classes.join(" ")}>{this.props.children}</button>
         )
     }
 }

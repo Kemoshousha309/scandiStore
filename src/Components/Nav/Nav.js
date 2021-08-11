@@ -36,7 +36,7 @@ class Nav extends Component {
                         <ul>
                             {
                                 this.props.categories.map(i => {
-                                    return  <li><NavLink activeClassName={style.Selectd} to={i.name}>{i.name}</NavLink></li>
+                                    return  <li key={i.name} ><NavLink activeClassName={style.Selectd} to={i.name}>{i.name}</NavLink></li>
                                 })
                             }
                         </ul>

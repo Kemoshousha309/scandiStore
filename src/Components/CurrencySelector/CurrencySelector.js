@@ -4,6 +4,7 @@ import Icon from "../../Ui/Icon";
 import Backdrop from "../../Ui/Backdrop/Backdrop";
 import Aux from "../../hoc/Aux"
 import { connect } from "react-redux";
+import { set_currency } from "../../store/actions";
 
 // This is a custom component to select the currency
 
@@ -19,7 +20,12 @@ class CurrencySelector extends Component {
         this.setState({
             value: e.target.id,
         })
+        this.props.set_currency(e.target.id)
         this.close()
+    }
+
+    componentDidMount () {
+        this.props.set_currency(this.state.value)
     }
 
 
@@ -50,7 +56,7 @@ class CurrencySelector extends Component {
                         <ul className={openStyle}>
                             {
                                 currencies.map(i => {
-                                    return  <li onClick={this.updateValue} id={i}>{mapSymbol(i)} {i}</li>
+                                    return  <li key={i} onClick={this.updateValue} id={i}>{mapSymbol(i)} {i}</li>
                                 })
                             }
                         </ul>
@@ -64,7 +70,7 @@ class CurrencySelector extends Component {
 }
 
 
-const mapSymbol = (c) => {
+export const mapSymbol = (c) => {
     switch (c) {
         case "GBP": return <span>&#163;</span>
         case "AUD": return <span>&#36;</span>
@@ -80,9 +86,13 @@ const mapStateToProps = state => {
     return {
         currencies: state.currencies
     }
+}
+  
+const mapDispatchToProps = dispatch => {
+    return {
+        set_currency: (cur) => dispatch(set_currency(cur))
+    }
   }
   
-
-  
-  export default connect(mapStateToProps, null)(CurrencySelector);
+export default connect(mapStateToProps, mapDispatchToProps)(CurrencySelector);
   

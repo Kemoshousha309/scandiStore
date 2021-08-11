@@ -1,3 +1,5 @@
 export const SET_CURRENCIES = "SET_CURRENCIES";
 export const SET_CATEGORIES = "SET_CATEGORIES";
 export const SET_LOADING = "SET_LOADING";
+export const SET_PRODUCTS = "SET_PRODUCTS";
+export const SET_CURRENCY = "SET_CURRENCY";
