@@ -1,12 +1,13 @@
 @import "../../../global_styles.scss";
 
+
+// small scale display
 .Container {
     display: flex;
     align-items: stretch;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 3.5rem;
-    
     
     .Left {
         display: flex;
@@ -29,14 +30,14 @@
             display: flex;
 
             div:last-of-type{
-                margin-left: -3rem;
-                @media only screen and (max-width: $phone_larg) {
-                    margin-left: -1rem;
-                  }
+                // margin-left: -3rem;
+                // @media only screen and (max-width: $phone_larg) {
+                //     margin-left: -1rem;
+                //   }
 
-                @media only screen and (max-width: $phone_larg) {
-                margin-left: 0rem;
-                }
+                // @media only screen and (max-width: $phone_larg) {
+                // margin-left: 0rem;
+                // }
             }
         }
     }
@@ -65,4 +66,82 @@
             }
         }
     }
+}
+
+
+// large scale display
+
+.ContainerBig {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 3.5rem;
+
+    .Left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 95%;
+        
+        .Name{
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .Cat {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .Price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .Sizes {
+            display: flex;
+            div {
+                margin: 2rem ;
+                margin-left: 0;
+            }
+          
+        }
+    }
+    
+    
+    .Right {
+        display: flex;
+        
+        .AmountSec {
+            margin-right: 3rem !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            
+            .Amount {
+                font-weight: 500;
+                font-size: 2rem;
+            }
+
+        }
+        
+        .ImgWrapper {
+            margin-right: 5rem;
+            @media only screen and (max-width: $taplet_larg) {
+                margin-right: 0rem;
+                }
+            img {
+                height: auto;
+                max-height: 30rem;
+                width: 30rem;
+                @media only screen and (max-width: $phone_larg) {
+                    height: 20rem;
+                }
+            }
+        }
+    }   
 }

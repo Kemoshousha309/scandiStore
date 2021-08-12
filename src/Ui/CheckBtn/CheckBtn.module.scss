@@ -1,0 +1,27 @@
+@import "../../global_styles.scss";
+
+.Container {
+
+    input {
+        display: none;
+    }
+
+    input:checked + label {
+        background-color: $black_color;
+        color: white;
+    }
+
+    label{
+        border: 1px solid $black_color;
+        padding: .5rem .9rem;
+        font-size: 1.4rem;
+        cursor: pointer;
+    }
+    
+    
+    .disable{
+        border: 1px solid rgba(0, 0, 0, 0.527);
+        opacity: .5;
+        cursor: not-allowed;
+    }
+}

@@ -1,87 +1,172 @@
 import { Component } from "react";
 import { connect } from "react-redux";
 import Btn from "../../Ui/Btn/Btn";
-import RadioBtn from "../../Ui/RadioBtn/RadioBtn";
+import CheckBtn from "../../Ui/CheckBtn/CheckBtn";
 import style from './ProductPage.module.scss';
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 import { mapSymbol } from "../CurrencySelector/CurrencySelector";
+import { add_product_to_cart } from "../../store/actions";
+
+
 
 
 
 class ProductPage extends Component {
+
+    state = {
+
+    }
+
+    componentDidMount () {
+        const params = getParams(this.props.location.search); 
+        const product = getProduct(params.id, params.cat, this.props.products); 
+        const attr = {}
+        product.attributes.forEach(i => {
+            attr[i.id] = i.items
+        })
+        const att  = {}
+        for(let key in attr) {
+            const item = attr[key];
+
+            item.forEach(i => {
+                att[i.id + "_" + key] = false
+            })
+        }
+
+        this.setState({
+            product: {
+                id: product.id,
+                atts: att
+            }
+        })
+    }
+
+
+    attChangeHandler = (e, id) => {
+
+        const value = e.target.checked;
+        const [clickedItemId, clickedItemsId] = separate(id)
+        const attsClone = {...this.state.product.atts};
+
+        for(let key in attsClone){
+            const [itemId, itemsId] = separate(key)
+            if(itemsId === clickedItemsId) {
+                attsClone[key] = false
+            }
+        }
+
+        attsClone[id] = value
+
+        const productClone = {...this.state.product};
+        productClone.atts = attsClone;
+
+        this.setState({product: productClone})
+        
+    }
+
     render() {
 
         const params = getParams(this.props.location.search);   
         const product = getProduct(params.id, params.cat, this.props.products);
 
-        let [currency, price] = [null, null];
-        product.prices.map(i => {
-            if(this.props.currency === i.currency){
-                [currency, price] = [i.currency, i.amount]
-            }
-        })
+        const [currency, price] = getPrice(product, this.props.currency);
+ 
 
-        return (
-            <div className={style.Container} >
-                <div className={style.Left}>
+        let content = null;
 
-                    <div className={style.ImgContainer}>
-
+        if(this.state.product) {
+            content =  (
+                <div className={style.Container} >
+                    <div className={style.Left}>
+    
+                        <div className={style.ImgContainer}>
+    
+                            {
+                                product.gallery.map(i => {
+                                    if(i !== 0){
+                                        return (    
+                                            <img src={i}
+                                            alt={product.name + i}
+                                            className={style.Img}></img>
+                                            )
+                                    }
+                                })
+                            }
+    
+                        </div>
+    
+                        <img src={product.gallery[0]}
+                        alt={product.name}
+                        className={style.MainImg}></img>
+    
+                    </div>
+                    <div className={style.Right}>
+    
+                        <div className={style.Header}>
+                            <h1>{product.name}</h1>
+                            <span>{product.brand}</span>
+                        </div>
+    
                         {
-                            product.gallery.map(i => {
-                                if(i !== 0){
-                                    return (    
-                                        <img src={i}
-                                        alt={product.name + i}
-                                        className={style.Img}></img>
-                                        )
-                                }
-                            })
+                            product.attributes.map(i => {
+                                return (
+                                    <div className={style.Att} >
+                                        <span>{i.name}:</span>
+                                        <div>
+                                            {
+                                            i.items.map(x => {
+                                                const id = x.id + "_" + i.id;
+                                                return (
+                                                    <CheckBtn 
+                                                    changeHandler={this.attChangeHandler}
+                                                    id={id}
+                                                    value={x.value} 
+                                                    checked={this.state.product.atts[id]}
+                                                    >{x.displayValue}</CheckBtn>
+                                                )
+                                            })
+                                            }
+                                        </div>
+                                    </div>
+                                )
+                            })   
                         }
-
+    
+                        <div className={style.Price} >
+                                <span>price:</span>
+                                <span>{price} {mapSymbol(currency)} </span>
+                        </div>
+    
+                        <Btn onClick={() => this.props.add_product_to_cart(this.state.product)} 
+                        width="100%" type="primary">Add to cart</Btn>
+    
+                        <div className={style.Description}>
+                            {
+                                 ReactHtmlParser(product.description)
+                            }
+                        </div>
+    
                     </div>
-
-                    <img src={product.gallery[0]}
-                    alt={product.name}
-                    className={style.MainImg}></img>
-
                 </div>
-                <div className={style.Right}>
+            )
+        }
 
-                    <div className={style.Header}>
-                        <h1>{product.name}</h1>
-                        <span>{product.brand}</span>
-                    </div>
-
-                    <div className={style.Sizes} >
-                            <span>sizes:</span>
-                            <div>
-                                <RadioBtn  big disable={true} value="x-larg" name="size"  >xl</RadioBtn>
-                                <RadioBtn   big disable={true} value="small" name="size" >s</RadioBtn>
-                                <RadioBtn  big disable={false} value="mduim" name="size"  >m</RadioBtn>
-                                <RadioBtn   big disable={true} value="larg" name="size" >l</RadioBtn>
-                            </div>
-                    </div>
-
-                    <div className={style.Price} >
-                            <span>price:</span>
-                            <span>{price} {mapSymbol(currency)} </span>
-                    </div>
-
-                    <Btn width="100%" type="primary">Add to cart</Btn>
-
-                    <div className={style.Description}>
-                        {
-                             ReactHtmlParser(product.description)
-                        }
-
-                    </div>
-
-                </div>
-            </div>
-        )
+        return content;
     }
 }
+
+
+export const getPrice = (product, cur) => {
+    let [currency, price] = [null, null];
+    product.prices.map(i => {
+        if(cur === i.currency){
+            [currency, price] = [i.currency, i.amount]
+        }
+    })
+    return [currency, price]
+}
+
+
 
 const getProduct = (id, cat, products) => {
     let relatedProducts = null
@@ -98,6 +183,11 @@ const getProduct = (id, cat, products) => {
     });
 
     return product;
+}
+
+export const separate = (str, splitor="_") => {
+    const arr = str.split(splitor);
+    return [arr[0], arr[1]]
 }
 
 const getParams = str => {
@@ -124,8 +214,16 @@ const mapStateToProps = state => {
         products: state.products,
         currency: state.currency
     }
-  }
+}
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        add_product_to_cart: (product) =>  dispatch(add_product_to_cart(product))
+    }
+}
   
   
-export default connect(mapStateToProps, null)(ProductPage);
+  
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);
   

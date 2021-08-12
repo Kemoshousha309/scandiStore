@@ -3,3 +3,5 @@ export const SET_CATEGORIES = "SET_CATEGORIES";
 export const SET_LOADING = "SET_LOADING";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const SET_CURRENCY = "SET_CURRENCY";
+export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
+export const UPDATE_AMOUNT = "UPDATE_AMOUNT";

@@ -2,9 +2,18 @@ import { Component } from "react";
 import style from "./CartOverlay.module.scss"
 import CartItem from "./CartItem/CartItem";
 import Btn from "../../Ui/Btn/Btn";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
+
 
 class CartOverlay extends Component {
     render() {
+        const cartArr = [];
+        for(let key in this.props.cart){
+            cartArr.push(this.props.cart[key])
+        }
+
         return (
             <div className={style.Container}>
                 <div className={style.Header}>
@@ -12,8 +21,11 @@ class CartOverlay extends Component {
                 </div>
 
                 <div className={style.Content} >
-                    <CartItem />
-                    <CartItem />
+                {
+                    cartArr.map(i => {
+                    return <CartItem  product={i}  />
+                    })
+                }
 
                 </div>
 
@@ -24,7 +36,7 @@ class CartOverlay extends Component {
                     </div>
 
                     <div className={style.CartActions}>
-                        <Btn type="outline">View bag</Btn>
+                        <Link to="/cart" ><Btn type="outline">View bag</Btn></Link>
                         <Btn type="primary">check out</Btn>
                     </div>
                 </div>
@@ -34,4 +46,15 @@ class CartOverlay extends Component {
     }
 }
 
-export default CartOverlay; 
+
+const mapStateToProps = state => {
+    return {
+        cart: state.cart
+    }
+}
+  
+
+  
+export default connect(mapStateToProps, null)(CartOverlay);
+  
+

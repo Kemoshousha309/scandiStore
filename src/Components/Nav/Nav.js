@@ -52,7 +52,11 @@ class Nav extends Component {
                             <Icon onClick={this.cartOverlayOpenHandler}
                             icon="shopping-cart" size={16} color="#43464E" />
                             <DropMenu  open={this.state.cartOverlayOpen} >
-                                <Item><CartOverlay /></Item>
+                                <Item>
+                                    {
+                                        this.state.cartOverlayOpen ? <CartOverlay /> : null
+                                    }    
+                                </Item>
                             </DropMenu>
                         </div>
                     </div>

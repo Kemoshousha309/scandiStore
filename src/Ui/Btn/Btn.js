@@ -16,7 +16,7 @@ class Btn extends Component {
             inlineStyle.width = this.props.width
         }
         return(
-            <button style={inlineStyle} className={classes.join(" ")}>{this.props.children}</button>
+            <button style={inlineStyle} onClick={this.props.onClick} className={classes.join(" ")}>{this.props.children}</button>
         )
     }
 }

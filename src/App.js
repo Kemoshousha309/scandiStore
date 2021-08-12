@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './App.module.scss';
+import CartPage from './Components/CartPage/CartPage';
 import CategoryPage from './Components/CategoryPage/CategoryPage';
 import Nav from './Components/Nav/Nav';
 import ProductPage from './Components/ProductPage/ProductPage';
@@ -40,6 +41,7 @@ class App extends Component {
                   return <Route key={i.name} path={`/${i.name}`}><CategoryPage products={this.props.products} catName={i.name} /> </Route>
                 })}
                 <Route path="/product" component={ProductPage} />
+                <Route path="/cart" component={CartPage} />
                  <Redirect from="/" exact to={`/${this.props.categories[0].name}`} />
               </Switch>
               </main>
