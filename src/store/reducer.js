@@ -44,6 +44,19 @@ const add_product_to_cart = (state, action) => {
         amount: 1
     }
 
+    store_cart(cart)
+    return {
+        ...state,
+        cart: cart
+    }
+}
+
+const remove_product_form_cart = (state, action) => {
+
+    const cart = {...state.cart}
+    delete cart[action.id]
+
+    store_cart(cart)
     return {
         ...state,
         cart: cart
@@ -51,12 +64,21 @@ const add_product_to_cart = (state, action) => {
 }
 
 
+
 const upddate_amount = (state, action) => {
-    const cartClone = {...state.cart};
-    cartClone[action.id].amount = action.amount
+    const cart = {...state.cart};
+    cart[action.id].amount = action.amount
+    store_cart(cart)
     return {
         ...state,
-        cart: cartClone
+        cart: cart
+    }
+}
+
+const init_cart = (state, action) => {
+    return {
+        ...state,
+        cart: action.cart
     }
 }
 
@@ -69,7 +91,16 @@ export const reducer = (state=initState, action) => {
         case actionTypes.SET_PRODUCTS: return set_products(state, action)
         case actionTypes.SET_CURRENCY: return set_currency(state, action)
         case actionTypes.ADD_PRODUCT_TO_CART: return add_product_to_cart(state, action)
+        case actionTypes.REMOVE_PRODUCT: return remove_product_form_cart(state, action)
         case actionTypes.UPDATE_AMOUNT: return upddate_amount(state, action)
+        case actionTypes.INIT_CART: return init_cart(state, action)
         default: return state
     }
 }   
+
+
+const store_cart = (cartClone) => {
+    const storeTime = new Date().getTime();
+    localStorage.setItem("cart_storeTime", storeTime);
+    localStorage.setItem("cart", JSON.stringify(cartClone));
+}

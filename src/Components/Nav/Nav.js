@@ -28,6 +28,14 @@ class Nav extends Component {
     }
 
     render() {
+
+        // get number of products in cart
+        let num = 0;
+        for(let key in this.props.cart){
+            num += 1
+        }
+
+
         return (
             <Aux>
                 <Backdrop clicked={this.cartOverlayOpenHandler} open={this.state.backdropOpen} color="#39374838" />
@@ -51,10 +59,11 @@ class Nav extends Component {
                         <div className={style.Optoin}>
                             <Icon onClick={this.cartOverlayOpenHandler}
                             icon="shopping-cart" size={16} color="#43464E" />
+                            {num > 0 ?  <span onClick={this.cartOverlayOpenHandler} className={style.CartCount}>{num}</span> : null}
                             <DropMenu  open={this.state.cartOverlayOpen} >
                                 <Item>
                                     {
-                                        this.state.cartOverlayOpen ? <CartOverlay /> : null
+                                        this.state.cartOverlayOpen ? <CartOverlay close={this.cartOverlayOpenHandler} /> : null
                                     }    
                                 </Item>
                             </DropMenu>
@@ -70,7 +79,8 @@ class Nav extends Component {
 
 const mapStateToProps = state => {
     return {
-        categories: state.categories
+        categories: state.categories,
+        cart: state.cart
     }
 }
   

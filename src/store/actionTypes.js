@@ -5,3 +5,5 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 export const SET_CURRENCY = "SET_CURRENCY";
 export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
 export const UPDATE_AMOUNT = "UPDATE_AMOUNT";
+export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
+export const INIT_CART = "INIT_CART";

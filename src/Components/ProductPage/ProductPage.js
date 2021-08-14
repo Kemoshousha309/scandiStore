@@ -6,6 +6,7 @@ import style from './ProductPage.module.scss';
 import ReactHtmlParser from 'react-html-parser';
 import { mapSymbol } from "../CurrencySelector/CurrencySelector";
 import { add_product_to_cart } from "../../store/actions";
+import StatusBar from "../../Ui/StatusBar/StatusBar";
 
 
 
@@ -14,31 +15,43 @@ import { add_product_to_cart } from "../../store/actions";
 class ProductPage extends Component {
 
     state = {
-
+        addCart: false,
+        status: {
+            mess: null,
+            type: "success"
+        }
     }
 
     componentDidMount () {
         const params = getParams(this.props.location.search); 
-        const product = getProduct(params.id, params.cat, this.props.products); 
-        const attr = {}
-        product.attributes.forEach(i => {
-            attr[i.id] = i.items
-        })
-        const att  = {}
-        for(let key in attr) {
-            const item = attr[key];
-
-            item.forEach(i => {
-                att[i.id + "_" + key] = false
-            })
-        }
-
+        const product = getProduct(params.id, params.cat, this.props.products)
+        const initAtt = initAttrs(product.attributes)
         this.setState({
             product: {
                 id: product.id,
-                atts: att
+                atts: initAtt
             }
         })
+    }
+
+    addCartHandler = () => {
+        this.props.add_product_to_cart(this.state.product)
+        this.setState({status: {
+            mess: "product is added",
+            type: "success"
+        }})
+       
+        // Timer 
+        let lastTimer = null
+        var timerId = setTimeout(() => {
+            this.setState({status: {
+                mess: null
+            }})
+        }, 2000);
+        if(lastTimer !== timerId && lastTimer){
+            clearTimeout(lastTimer)
+        }
+        lastTimer = timerId
     }
 
 
@@ -60,7 +73,10 @@ class ProductPage extends Component {
         const productClone = {...this.state.product};
         productClone.atts = attsClone;
 
-        this.setState({product: productClone})
+        // check the user choose an option to active add to chart
+        const addCart = checkOptions(attsClone);
+
+        this.setState({product: productClone, addCart: addCart})
         
     }
 
@@ -85,7 +101,9 @@ class ProductPage extends Component {
                                 product.gallery.map(i => {
                                     if(i !== 0){
                                         return (    
-                                            <img src={i}
+                                            <img 
+                                            key={i}
+                                            src={i}
                                             alt={product.name + i}
                                             className={style.Img}></img>
                                             )
@@ -109,8 +127,8 @@ class ProductPage extends Component {
     
                         {
                             product.attributes.map(i => {
-                                return (
-                                    <div className={style.Att} >
+                                    return (
+                                    <div key={i.name} className={style.Att} >
                                         <span>{i.name}:</span>
                                         <div>
                                             {
@@ -118,6 +136,8 @@ class ProductPage extends Component {
                                                 const id = x.id + "_" + i.id;
                                                 return (
                                                     <CheckBtn 
+                                                    type={i.type}
+                                                    key={id}
                                                     changeHandler={this.attChangeHandler}
                                                     id={id}
                                                     value={x.value} 
@@ -136,9 +156,15 @@ class ProductPage extends Component {
                                 <span>price:</span>
                                 <span>{price} {mapSymbol(currency)} </span>
                         </div>
+
+                        {
+                            product.inStock ? <Btn 
+                            disable={!this.state.addCart} 
+                            onClick={this.addCartHandler} 
+                            width="100%" type="primary">Add to cart</Btn> : 
+                            <span className={style.outStock}>out of stock</span>
+                        }
     
-                        <Btn onClick={() => this.props.add_product_to_cart(this.state.product)} 
-                        width="100%" type="primary">Add to cart</Btn>
     
                         <div className={style.Description}>
                             {
@@ -147,6 +173,9 @@ class ProductPage extends Component {
                         </div>
     
                     </div>
+                    {
+                    this.state.status.mess ? <StatusBar type={this.state.status.type} >{this.state.status.mess}</StatusBar> : null 
+                }
                 </div>
             )
         }
@@ -155,6 +184,10 @@ class ProductPage extends Component {
     }
 }
 
+
+
+
+// UTILITY FUNCTIONS
 
 export const getPrice = (product, cur) => {
     let [currency, price] = [null, null];
@@ -168,7 +201,7 @@ export const getPrice = (product, cur) => {
 
 
 
-const getProduct = (id, cat, products) => {
+export const getProduct = (id, cat, products) => {
     let relatedProducts = null
     products.forEach(i => {
         if(i.name === cat) {
@@ -185,12 +218,50 @@ const getProduct = (id, cat, products) => {
     return product;
 }
 
+
+
 export const separate = (str, splitor="_") => {
     const arr = str.split(splitor);
     return [arr[0], arr[1]]
 }
 
-const getParams = str => {
+
+export const structre_atts_options = (options) => {
+    const structured_obj = {}
+    for(let key in options){
+        const [itemId, itemsId] = separate(key);
+        structured_obj[itemsId] = {
+            ...structured_obj[itemsId],
+            [itemId]: options[key]
+        }
+    }
+    return structured_obj;
+}
+
+
+
+const checkOptions = (options) => {
+    // check if the user choose an option form each attribute
+
+    // structure the options obj
+    const structured_obj = structre_atts_options(options);
+
+    // check if each property have at least a true value
+    const accum = []
+    for(let key in structured_obj){
+        let check = false
+        for(let k in structured_obj[key]){
+            check = structured_obj[key][k] || check
+        }
+        accum.push(check)
+    }
+
+    return accum.every(i => i);
+
+}
+
+
+export const getParams = str => {
     let arr = null 
     for(let i=0; i < str.length; i++) {
         const char = str[i];
@@ -208,6 +279,25 @@ const getParams = str => {
 
     return params; 
 }
+
+
+export const initAttrs = (attributes) => { 
+        const attr = {}
+        attributes.forEach(i => {
+            attr[i.id] = i.items
+        })
+        const att  = {}
+        for(let key in attr) {
+            const item = attr[key];
+            
+            item.forEach(i => {
+                att[i.id + "_" + key] = false
+            })
+        }
+
+        return att
+}
+
 
 const mapStateToProps = state => {
     return {

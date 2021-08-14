@@ -6,7 +6,7 @@ import Icon from "../../../Ui/Icon";
 import { connect } from "react-redux";
 import { getPrice, separate } from "../../ProductPage/ProductPage";
 import { mapSymbol } from "../../CurrencySelector/CurrencySelector";
-import { upddate_amount } from "../../../store/actions";
+import { remove_product_form_cart, upddate_amount } from "../../../store/actions";
 
  
 
@@ -22,9 +22,11 @@ class CartItem extends Component {
     }
 
     decrement_amount = () => {
-        if(this.state.amount !== 1){
+        if(this.state.amount > 1){
             this.setState({amount: this.state.amount - 1})
             this.props.update_amount(this.state.amount - 1, this.props.product.id)
+        }else {
+            this.props.remove_product_form_cart(this.props.product.id)
         }
     }
 
@@ -35,25 +37,38 @@ class CartItem extends Component {
         }
     }
 
+    static getDerivedStateFromProps(props, state) {
+        let amount = state.amount
+        if(props.amount !== state.amount) {
+            amount = props.amount
+        }
+
+        return {
+            amount: amount
+        }
+        
+    }
+
 
     render () {
 
-         let scaleStyle = style.Container
+        let scaleStyle = style.Container
         if(this.props.big){
             scaleStyle = style.ContainerBig
         }
 
-        // get All products
-        const allProducts = [];
-        this.props.products.forEach(i => {
-            allProducts.push(...i.products)
-        });
-
+        
         
         let content = null;
         
         if(this.props.product){
             
+            // get All products
+            const allProducts = [];
+            this.props.products.forEach(i => {
+                allProducts.push(...i.products)
+            });
+
             // get product info to disply
             let productInfo = null
             allProducts.forEach(i => {
@@ -71,19 +86,20 @@ class CartItem extends Component {
                     badages.push(key)
                 }
             }
-
+            
             badages.forEach((i, index) => {
                 const [itmeId, itemsId] = separate(i)
                 badages[index] = [itmeId, itemsId]
             });
-
+            
             let attOptoin = [];
             badages.forEach(i => {
                 productInfo.attributes.forEach(a => {
                     if(i[1] === a.id){
                         a.items.forEach(t => {
                             if(t.id === i[0]){
-                                attOptoin.push(t)
+                                const type = a.type
+                                attOptoin.push({...t, type})
                             }
                         });
                     }
@@ -98,18 +114,19 @@ class CartItem extends Component {
                         <div className={style.Left}>
                         <span className={style.Name} >{productInfo.name}</span>
                         <span className={style.Cat}>{productInfo.category}</span>
-                        <span className={style.Price}>{price} {mapSymbol(currency)}</span>
+                        <span className={style.Price}>{(price * this.state.amount).toFixed(2)} {mapSymbol(currency)}</span>
                         <div className={style.Sizes}>
-                            {
+                            { 
                                 attOptoin.map(i => {
                                     return (
                                         <CheckBtn 
+                                        type={i.type}
+                                        key={i.id + Math.random()}
                                         changeHandler={() => {}}
                                         id={i.id}
                                         value={i.value}
-                                        checked={true}
+                                        checked={false}
                                         >{i.displayValue}</CheckBtn>
-
                                     )
                                 })
                             }
@@ -148,7 +165,9 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
     return {
-        update_amount: (amount, id) => dispatch(upddate_amount(amount, id)) 
+        update_amount: (amount, id) => dispatch(upddate_amount(amount, id)),
+        remove_product_form_cart: (id) =>  dispatch(remove_product_form_cart(id))
+
     }
 }
  

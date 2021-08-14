@@ -6,7 +6,7 @@ import CartPage from './Components/CartPage/CartPage';
 import CategoryPage from './Components/CategoryPage/CategoryPage';
 import Nav from './Components/Nav/Nav';
 import ProductPage from './Components/ProductPage/ProductPage';
-import { req_categories, req_currencies, req_products } from './store/actions';
+import { load_cart, req_categories, req_currencies, req_products } from './store/actions';
 import Spinner from './Ui/Spinner/Spinner';
 
 
@@ -68,6 +68,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(req_currencies())
       dispatch(req_categories())
       dispatch(req_products())
+      dispatch(load_cart())
     }
   }
 }

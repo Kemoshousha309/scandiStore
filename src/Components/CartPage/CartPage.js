@@ -15,10 +15,11 @@ class CartPage extends Component {
         return(
             <div className={style.Container}>
                 <h1>Cart</h1>
-                {
+                { cartArr.length > 0 ?
                     cartArr.map(i => {
-                       return <CartItem big  product={i}  />
-                    })
+                       return <CartItem key={i.id} big  product={i}  amount={i.amount} />
+                    }) :
+                    <p>The shopping cart is empty, you should add some products to see them here</p>
                 }
             </div>
 

@@ -24,21 +24,12 @@
         
         .Price {
             font-weight: 500;
+            font-family: "Roboto", sans-serif;
         }
         
         .Sizes {
             display: flex;
 
-            div:last-of-type{
-                // margin-left: -3rem;
-                // @media only screen and (max-width: $phone_larg) {
-                //     margin-left: -1rem;
-                //   }
-
-                // @media only screen and (max-width: $phone_larg) {
-                // margin-left: 0rem;
-                // }
-            }
         }
     }
     
@@ -75,6 +66,7 @@
     display: flex;
     align-items: stretch;
     justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
     margin-bottom: 3.5rem;
 
@@ -99,10 +91,14 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 2rem;
+            font-family: "Roboto", sans-serif;
+
         }
         
         .Sizes {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             div {
                 margin: 2rem ;
                 margin-left: 0;

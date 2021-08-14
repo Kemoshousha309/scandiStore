@@ -1,5 +1,5 @@
 import { Component } from "react";
-import style from "./CheckBtn.module.scss";
+import style from "./CheckBtn.module.scss"; 
 
 class CheckBtn extends Component {
 
@@ -9,6 +9,13 @@ class CheckBtn extends Component {
             classes.push(style.disable) 
         }
 
+        let type = style.TextType
+        if(this.props.type === "swatch"){
+            type = style.SwatchType
+        }
+        classes.push(type);
+
+   
         return (
             <div className={style.Container}>
                 <input 
@@ -20,11 +27,12 @@ class CheckBtn extends Component {
                 value={this.props.value} 
                 />
                 <label htmlFor={this.props.id} 
+                    style={{backgroundColor: this.props.value}}
                     className={classes.join(" ")}
-                >{this.props.children}</label>
+                >{this.props.type !== "swatch" ? this.props.children : null}</label>
             </div>
         )
-    }
+    }   
 }
 
 

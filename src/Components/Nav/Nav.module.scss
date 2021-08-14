@@ -99,6 +99,23 @@
                 cursor: pointer;
             }
         }
+
+        .CartCount {
+            position: absolute;
+            top: -9px;
+            right: -12px;
+            background-color: #1D1F22;
+            color: white;
+            width: 17px;
+            height: 17px;
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-family: "Roboto", sans-serif;
+            cursor: pointer;
+        }
     }
 
 }
