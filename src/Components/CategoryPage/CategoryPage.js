@@ -7,8 +7,9 @@ import StatusBar from "../../Ui/StatusBar/StatusBar";
 import { mapSymbol } from "../CurrencySelector/CurrencySelector";
 import { initAttrs, structre_atts_options } from "../ProductPage/ProductPage";
 import style from "./CategoryPage.module.scss";
-
-
+import Spinner1 from "../../Ui/Spinner1/Spinner1"
+import * as queries from "../../store/queries";
+import axios from "../../axois"
 
 
 
@@ -36,7 +37,7 @@ class CategoryPage extends Component {
 
             // Timer 
             let lastTimer = null
-            var timerId = setTimeout(() => {
+            const timerId = setTimeout(() => {
                 this.setState({status: {
                     mess: null
                 }})
@@ -58,7 +59,7 @@ class CategoryPage extends Component {
            
             // Timer 
             let lastTimer = null
-            var timerId = setTimeout(() => {
+            const timerId = setTimeout(() => {
                 this.setState({status: {
                     mess: null
                 }})
@@ -70,17 +71,40 @@ class CategoryPage extends Component {
         }
     }
 
+
+    componentDidMount () {
+        if(this.props.catName === "all"){
+            axios({
+                data: {
+                    query: queries.ALL_CATEGORIES_QUERY
+                }
+            })
+            .then(res => {
+                this.setState({category: res.data.data.category})
+            })
+            .catch(err => console.log(err.response))
+        }else{
+            axios({
+                data: {
+                    query: queries.cat_query(this.props.catName)
+                }
+            })
+            .then(res => {
+                this.setState({category: res.data.data.category})
+            })
+            .catch(err => console.log(err.response))
+        }
+    }
+
+
+
     render() {
 
-        let products = null;
-        this.props.products.forEach(i => {
-            if(i.name === this.props.catName){
-                products = i.products
-            }    
-        });
-        
-        return (
-            <div className={style.Container}>
+        let content = <Spinner1 />;
+        if(this.state.category) {
+            const products = this.state.category.products
+            content = (
+                <div className={style.Container}>
                 <h1>{this.props.catName.toUpperCase()}</h1>
                 <div className={style.Gallary}>
                     {
@@ -114,7 +138,7 @@ class CategoryPage extends Component {
                                         <img src={i.gallery[0]} alt={i.name} ></img>
                                          </Link>
                                         {cartBtn}
-                                        <span className={style. Name} >{i.name}</span>
+                                        <span className={style.Name} >{i.name}</span>
                                         <span className={style.Price} >{price} {mapSymbol(currency)}</span>
                                 </div>  
                             )
@@ -126,7 +150,10 @@ class CategoryPage extends Component {
                     this.state.status.mess ? <StatusBar type={this.state.status.type} >{this.state.status.mess}</StatusBar> : null 
                 }
             </div>
-        )
+            )
+        }
+        
+        return content
     }
 }
 
@@ -161,15 +188,14 @@ const get_defualt_options = (structre_atts_options) => {
 const mapStateToProps = state => {
     return {
         currency: state.currency,
-        products: state.products,
-        cart: state.cart
+        cart: state.cart,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         add_product_to_cart: (product) =>  dispatch(add_product_to_cart(product)),
-        remove_product_form_cart: (id) =>  dispatch(remove_product_form_cart(id))
+        remove_product_form_cart: (id) =>  dispatch(remove_product_form_cart(id)),
     }
 }
 

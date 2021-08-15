@@ -37,12 +37,13 @@ class App extends Component {
               </header>
               <main>
               <Switch>
+              <Route path="/all"><CategoryPage products={this.props.products} catName="all" /> </Route>
                 {this.props.categories.map(i => {
                   return <Route key={i.name} path={`/${i.name}`}><CategoryPage products={this.props.products} catName={i.name} /> </Route>
                 })}
                 <Route path="/product" component={ProductPage} />
                 <Route path="/cart" component={CartPage} />
-                 <Redirect from="/" exact to={`/${this.props.categories[0].name}`} />
+                 <Redirect from="/" exact to={`/all`} />
               </Switch>
               </main>
           </div>

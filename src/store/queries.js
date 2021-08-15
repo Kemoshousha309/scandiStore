@@ -27,5 +27,97 @@ export const PRODUCTS_QUERY = `{
         }
       }
     }
-  }`;
-  
+}`;
+
+
+export const ALL_CATEGORIES_QUERY = `{
+  category {
+    name,
+    products {
+      id,
+      name,
+      inStock,
+      gallery,
+      description,
+      category,
+      attributes{
+        id,
+        name,
+        type,
+        items{
+          id,
+          displayValue,
+          value
+        }
+      },
+      prices {
+        currency,
+        amount
+      },
+      brand
+    }
+  }
+}`;
+
+export const product_query = (id) => {
+  return (`{
+    product(id: "${id}"){
+      id,
+      name,
+      inStock,
+      gallery,
+      description,
+      category,
+      attributes{
+        id,
+        name,
+        type,
+        items{
+          id,
+          displayValue,
+          value
+        }
+      },
+      prices {
+        currency,
+        amount
+      },
+      brand
+    }
+  }`)
+}  
+
+
+
+export const cat_query = (title) => {
+  return (`{
+    category(input: {title: "${title}"}){
+      name,
+      products {
+        id,
+        name,
+        inStock,
+        gallery,
+        description,
+        category,
+        attributes{
+          id,
+          name,
+          type,
+          items{
+            id,
+            displayValue,
+            value
+          }
+        },
+        prices {
+          currency,
+          amount
+        },
+        brand
+      }
+    }
+  }`)
+}  
+
+

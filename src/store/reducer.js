@@ -4,7 +4,7 @@ import * as actionTypes from "./actionTypes";
 const initState = {
     currencies: null,
     categories: null,
-    cart: {}
+    cart: {},
 }
 
 
@@ -83,7 +83,6 @@ const init_cart = (state, action) => {
 }
 
 
-
 export const reducer = (state=initState, action) => {
     switch (action.type) {
         case actionTypes.SET_CURRENCIES: return set_currencies(state, action)
@@ -91,7 +90,7 @@ export const reducer = (state=initState, action) => {
         case actionTypes.SET_PRODUCTS: return set_products(state, action)
         case actionTypes.SET_CURRENCY: return set_currency(state, action)
         case actionTypes.ADD_PRODUCT_TO_CART: return add_product_to_cart(state, action)
-        case actionTypes.REMOVE_PRODUCT: return remove_product_form_cart(state, action)
+        case actionTypes.REMOVE_PRODUCT_FROM_CART: return remove_product_form_cart(state, action)
         case actionTypes.UPDATE_AMOUNT: return upddate_amount(state, action)
         case actionTypes.INIT_CART: return init_cart(state, action)
         default: return state

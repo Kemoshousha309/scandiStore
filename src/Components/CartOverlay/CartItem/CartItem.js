@@ -6,13 +6,15 @@ import Icon from "../../../Ui/Icon";
 import { connect } from "react-redux";
 import { getPrice, separate } from "../../ProductPage/ProductPage";
 import { mapSymbol } from "../../CurrencySelector/CurrencySelector";
-import { remove_product_form_cart, upddate_amount } from "../../../store/actions";
-
- 
+import { remove_product_form_cart, upddate_amount } from "../../../store/actions";  
+import axios from "../../../axois"
+import * as queries from "../../../store/queries"
+import Spinner1 from "../../../Ui/Spinner1/Spinner1";
 
 class CartItem extends Component { 
 
     state = {
+        productInfo: null,
         amount: null
     }
 
@@ -33,6 +35,15 @@ class CartItem extends Component {
   
     componentDidMount () {
         if(this.props.product){
+            axios({
+                data: {
+                    query: queries.product_query(this.props.product.id)
+                }
+            })
+            .then(res => {
+                this.setState({productInfo: res.data.data.product})
+            })
+            .catch(err => console.log(err))
             this.setState({amount: this.props.product.amount})
         }
     }
@@ -59,25 +70,12 @@ class CartItem extends Component {
 
         
         
-        let content = null;
+        let content = <Spinner1 />;
         
-        if(this.props.product){
-            
-            // get All products
-            const allProducts = [];
-            this.props.products.forEach(i => {
-                allProducts.push(...i.products)
-            });
+        if(this.props.product && this.state.productInfo){
+ 
+            const productInfo =  this.state.productInfo
 
-            // get product info to disply
-            let productInfo = null
-            allProducts.forEach(i => {
-                if(i.id === this.props.product.id){
-                    productInfo = i;
-                }
-            })
-
-            
             // get attributes options that user choose
             const productAttrs = this.props.product.atts
             const badages = []
@@ -144,7 +142,7 @@ class CartItem extends Component {
                             </Btn>
                         </div>
                         <div className={style.ImgWrapper}>
-                            <img src={productInfo.gallery[0]} alt="product image" >
+                            <img src={productInfo.gallery[0]} alt={productInfo.name} >
                             </img>
                         </div>
                     </div>  

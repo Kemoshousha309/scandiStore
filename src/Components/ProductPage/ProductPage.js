@@ -5,9 +5,11 @@ import CheckBtn from "../../Ui/CheckBtn/CheckBtn";
 import style from './ProductPage.module.scss';
 import ReactHtmlParser from 'react-html-parser';
 import { mapSymbol } from "../CurrencySelector/CurrencySelector";
-import { add_product_to_cart } from "../../store/actions";
+import { add_product_to_cart} from "../../store/actions";
 import StatusBar from "../../Ui/StatusBar/StatusBar";
-
+import Spinner1 from "../../Ui/Spinner1/Spinner1";
+import axios from "../../axois"
+import * as queries from "../../store/queries"
 
 
 
@@ -22,25 +24,14 @@ class ProductPage extends Component {
         }
     }
 
-    componentDidMount () {
-        const params = getParams(this.props.location.search); 
-        const product = getProduct(params.id, params.cat, this.props.products)
-        const initAtt = initAttrs(product.attributes)
-        this.setState({
-            product: {
-                id: product.id,
-                atts: initAtt
-            }
-        })
-    }
-
+    
     addCartHandler = () => {
         this.props.add_product_to_cart(this.state.product)
         this.setState({status: {
             mess: "product is added",
             type: "success"
         }})
-       
+        
         // Timer 
         let lastTimer = null
         var timerId = setTimeout(() => {
@@ -53,44 +44,73 @@ class ProductPage extends Component {
         }
         lastTimer = timerId
     }
-
-
+    
+    
     attChangeHandler = (e, id) => {
-
+        
         const value = e.target.checked;
-        const [clickedItemId, clickedItemsId] = separate(id)
+        const clickedItemsId = separate(id)
         const attsClone = {...this.state.product.atts};
-
+        
         for(let key in attsClone){
-            const [itemId, itemsId] = separate(key)
-            if(itemsId === clickedItemsId) {
+            const itemsId = separate(key)
+            if(itemsId[1] === clickedItemsId[1]) {
                 attsClone[key] = false
             }
         }
-
+        
         attsClone[id] = value
-
+        
         const productClone = {...this.state.product};
         productClone.atts = attsClone;
-
+        
         // check the user choose an option to active add to chart
         const addCart = checkOptions(attsClone);
-
+        
         this.setState({product: productClone, addCart: addCart})
         
     }
+    componentDidMount () {
+        const params = getParams(this.props.location.search); 
+        axios({
+            data: {
+                query: queries.product_query(params.id)
+            }
+        })
+        .then(res => {
+            this.setState({productInfo: res.data.data.product})
+        })
+        .catch(err => console.log(err.response))
+    }
 
+    componentDidUpdate () {
+
+        if(!this.state.product && this.state.productInfo){
+            const initAtt = initAttrs(this.state.productInfo.attributes)
+            let addCart = false
+            if(Object.keys(initAtt).length === 0) {
+                addCart = true
+            }
+
+            this.setState({
+                product: {
+                    id: this.state.productInfo.id,
+                    atts: initAtt
+                },
+                addCart: addCart
+            })
+        }
+
+    }
+
+    
     render() {
-
-        const params = getParams(this.props.location.search);   
-        const product = getProduct(params.id, params.cat, this.props.products);
-
-        const [currency, price] = getPrice(product, this.props.currency);
- 
-
-        let content = null;
-
-        if(this.state.product) {
+        
+        let content = <Spinner1 />;
+        
+        if(this.state.product && this.state.productInfo) {
+            const product = this.state.productInfo
+            const [currency, price] = getPrice(product, this.props.currency);
             content =  (
                 <div className={style.Container} >
                     <div className={style.Left}>
@@ -107,6 +127,8 @@ class ProductPage extends Component {
                                             alt={product.name + i}
                                             className={style.Img}></img>
                                             )
+                                    }else {
+                                        return null
                                     }
                                 })
                             }
@@ -191,7 +213,7 @@ class ProductPage extends Component {
 
 export const getPrice = (product, cur) => {
     let [currency, price] = [null, null];
-    product.prices.map(i => {
+    product.prices.forEach(i => {
         if(cur === i.currency){
             [currency, price] = [i.currency, i.amount]
         }
@@ -200,23 +222,6 @@ export const getPrice = (product, cur) => {
 }
 
 
-
-export const getProduct = (id, cat, products) => {
-    let relatedProducts = null
-    products.forEach(i => {
-        if(i.name === cat) {
-            relatedProducts = i.products
-        }
-    });
-    let product = null;
-    relatedProducts.forEach(i => {
-        if(i.id === id) {
-            product = i
-        }
-    });
-
-    return product;
-}
 
 
 
@@ -302,14 +307,14 @@ export const initAttrs = (attributes) => {
 const mapStateToProps = state => {
     return {
         products: state.products,
-        currency: state.currency
+        currency: state.currency,
     }
 }
 
-
+    
 const mapDispatchToProps = dispatch => {
     return {
-        add_product_to_cart: (product) =>  dispatch(add_product_to_cart(product))
+        add_product_to_cart: (product) =>  dispatch(add_product_to_cart(product)),
     }
 }
   

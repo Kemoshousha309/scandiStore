@@ -5,11 +5,12 @@ import * as queries from "./queries";
 const set_currencies = (curs) => ({type: actionTypes.SET_CURRENCIES, currencies: curs})
 const set_categories = (cats) => ({type: actionTypes.SET_CATEGORIES, categories: cats})
 const set_products = (products) => ({type: actionTypes.SET_PRODUCTS, products: products})
+const init_cart = (cart) => ({type: actionTypes.INIT_CART, cart: cart})
 export const set_currency = (cur) => ({type: actionTypes.SET_CURRENCY, currency: cur})
 export const upddate_amount = (amount, id) => ({type: actionTypes.UPDATE_AMOUNT, id: id, amount: amount})
 export const add_product_to_cart = (product) => ({type: actionTypes.ADD_PRODUCT_TO_CART, product: product})
-export const remove_product_form_cart = (id) => ({type: actionTypes.REMOVE_PRODUCT, id: id})
-const init_cart = (cart) => ({type: actionTypes.INIT_CART, cart: cart})
+export const remove_product_form_cart = (id) => ({type: actionTypes.REMOVE_PRODUCT_FROM_CART, id: id})
+
 
 
 export const req_currencies = () => {

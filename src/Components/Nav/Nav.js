@@ -30,11 +30,7 @@ class Nav extends Component {
     render() {
 
         // get number of products in cart
-        let num = 0;
-        for(let key in this.props.cart){
-            num += 1
-        }
-
+        let num = Object.keys(this.props.cart).length;
 
         return (
             <Aux>
@@ -42,6 +38,7 @@ class Nav extends Component {
                 <nav className={style.Nav}>
                     <div className={style.NavCategories} >
                         <ul>
+                        <li><NavLink activeClassName={style.Selectd} to="/all">All</NavLink></li>
                             {
                                 this.props.categories.map(i => {
                                     return  <li key={i.name} ><NavLink activeClassName={style.Selectd} to={i.name}>{i.name}</NavLink></li>
