@@ -1,62 +1,58 @@
 @import "../../global_styles.scss";
 
 .Container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    input {
-        display: none;
+  input {
+    display: none;
+  }
+
+  .TextType {
+    border: 1px solid $black_color;
+    padding: 0.5rem 0.9rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    margin-bottom: 3rem;
+  }
+  input:checked + .TextType {
+    background-color: $black_color;
+    color: white;
+  }
+
+  .SwatchType {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 2px solid rgb(190, 190, 190);
+    display: inline-block;
+    box-shadow: 0px 0px 10px 0px #9e9e9e;
+    cursor: pointer;
+    margin: 1rem;
+  }
+
+  input:checked + .SwatchType {
+    position: relative;
+    box-shadow: none;
+    border: 2px solid white;
+    &::after {
+      content: "";
+      width: 5rem;
+      height: 5rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background-color: black;
+      z-index: -2;
     }
-    
-    .TextType{
-        border: 1px solid $black_color;
-        padding: .5rem .9rem;
-        font-size: 1.4rem;
-        cursor: pointer;
-        
-    }
-    input:checked + .TextType {
-        background-color: $black_color;
-        color: white;
-    }
+  }
 
-    
-
-
-    .SwatchType {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 50%;
-        border: 2px solid rgb(190, 190, 190);
-        display: inline-block;
-        box-shadow: 0px 0px 10px 0px #9e9e9e;
-        cursor: pointer;
-    }
-
-
-    input:checked + .SwatchType {
-        position: relative;
-        box-shadow: none;
-        border: 2px solid white;
-        &::after {
-            content: "";
-            width: 5rem;
-            height: 5rem;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background-color: black;
-            z-index: -2;
-        }
-    }
-
-
-    .disable{
-        border: 1px solid rgba(0, 0, 0, 0.527);
-        opacity: .5;
-        cursor: not-allowed;
-    }
+  .disable {
+    border: 1px solid rgba(0, 0, 0, 0.527);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }

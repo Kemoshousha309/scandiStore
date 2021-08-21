@@ -1,114 +1,106 @@
 @import "../../global_styles.scss";
 
-.Container{
-    margin-top: 5rem;
+.Container {
+  margin: 5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+
+
+  .Left {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 5rem;
 
-    .Left {
+    .MainImg {
+      width: 500px;
+      height: 500px;
+      object-fit: contain;
+      margin: 0 1rem 5rem 1rem;
+      @media only screen and (max-width: $taplet_larg) {
+        width: 85%;
+        height: auto;
+        margin: 0 auto;
+        order: 0;
+      }
+    }
+    .ImgContainer {
+      display: flex;
+      flex-direction: column;
+      @media only screen and (max-width: $taplet_larg) {
+        order: 1;
+        flex-direction: row;
+        justify-content: space-around;
+        margin: 2rem auto;
+        flex-wrap: wrap;
+      }
+      .Img {
+        cursor: pointer;
+        width: 10rem;
+        height: 10rem;
+        margin-bottom: 2px;
+        &:not(:last-child) {
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+
+  .Right {
+      margin-left: 3rem;
+    .Header {
+      margin-bottom: 3rem;
+      h1 {
+        font-weight: 400;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .Att {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 3rem;
+
+      span {
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+
+      div {
         display: flex;
         flex-wrap: wrap;
 
-        .MainImg {
-            width: 50rem;
-            height: 50rem;
-            margin:0 5rem;
-            @media only screen and (max-width: $taplet_larg) {
-                width: 85%;
-                height: auto;
-                margin: 0 auto;
-                order: 0;
-            }
-
-        }   
-
-        .ImgContainer {
-            display: flex;
-            flex-direction: column;
-            @media only screen and (max-width: $taplet_larg) {
-                order: 1;
-                flex-direction: row;
-                justify-content: space-around;
-                margin: 2rem auto;
-                flex-wrap: wrap;
-            }
-            .Img {
-
-                width: 10rem;
-                height: 10rem;
-                margin-bottom: 2px;
-                &:not(:last-child) {
-                    margin-right: 2px;
-                }
-
-                
-            }
+        div {
+          margin-right: 1rem;
         }
-
+      }
     }
 
-
-    .Right {
-    
-        .Header {
-            margin-bottom: 3rem;
-            h1 {
-                font-weight: 400;
-                margin-bottom: 1rem;
-            }
-
-        }
-
-        .Att {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 3rem;
-            
-            span {
-                font-weight: 600;
-                text-transform: uppercase;
-                margin-bottom: 1rem;
-            }
-
-            div {
-                display: flex;
-                flex-wrap: wrap;
-
-                div{
-                    margin-right: 1rem;
-                }
-            }
-        }
-
-        .outStock {
-            background-color: red;
-            color: white;
-            padding: 3px 5px;
-            border-radius: 5px;
-        }
-
-
-        .Price {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 3rem;
-            span:first-of-type {
-                margin-bottom: 1rem;
-                font-weight: 600;
-                text-transform: uppercase;
-            }
-            span:last-of-type {
-                font-weight: bolder;
-                font-family: "Roboto", sans-serif;
-            }
-
-        }
-
-        .Description {
-            margin-top: 5rem;
-            max-width: 50rem;
-        }
+    .outStock {
+      background-color: red;
+      color: white;
+      padding: 3px 5px;
+      border-radius: 5px;
     }
 
+    .Price {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 3rem;
+      span:first-of-type {
+        margin-bottom: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      span:last-of-type {
+        font-weight: bolder;
+        font-family: "Roboto", sans-serif;
+      }
+    }
 
+    .Description {
+      margin-top: 5rem;
+      max-width: 50rem;
+    }
+  }
 }

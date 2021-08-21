@@ -1,67 +1,62 @@
 @import "../../global_styles.scss";
 
 .Select {
-    width: fit-content;
+  width: fit-content;
 
-    button {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: none;
-        background-color: transparent;
-        font-size: inherit;
-        font-family: inherit;
-        cursor: pointer;
-        z-index: 5;
+  button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    z-index: 5;
 
-
-        svg {
-            transition: all .3s;
-            margin-left: .5rem;
-        }
-        .up{
-            transform: rotate(0deg);
-        }
-
-        .down {
-            transform: rotate(180deg);
-        }
-
+    svg {
+      transition: all 0.3s;
+      margin-left: 0.5rem;
+    }
+    .up {
+      transform: rotate(0deg);
     }
 
-    ul {
-        position: absolute;
-        top: 4rem;
-        z-index: 5;
-        list-style: none;
-        margin: 0rem;
-        width: 100%;
-        overflow: hidden;
-        transition: all .3s;
-        background-color: white;
-        padding: 0;
-        width: 8rem;
-
-        li {
-            cursor: pointer;
-            padding: 1rem;
-            transition: all .1s;
-
-            &:hover {
-                background-color: #e2e2e2;
-            }
-        }
-
-
+    .down {
+      transform: rotate(180deg);
     }
+  }
 
-    
-    .show {
-        max-height: 30rem;
+  ul {
+    position: absolute;
+    top: 4rem;
+    z-index: 5;
+    list-style: none;
+    margin: 0rem;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s;
+    background-color: white;
+    padding: 0;
+    width: 8rem;
+
+    li {
+      cursor: pointer;
+      padding: 1rem;
+      transition: all 0.1s;
+
+      &:hover {
+        background-color: #e2e2e2;
+      }
     }
-    
-    .hide {
-        max-height: 0;
-    }
+  }
+
+  .show {
+    max-height: 30rem;
+  }
+
+  .hide {
+    max-height: 0;
+  }
 }

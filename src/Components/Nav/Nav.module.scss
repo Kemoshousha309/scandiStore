@@ -1,123 +1,110 @@
 @import "../../global_styles.scss";
 
 .Nav {
+  display: flex;
+  justify-content: space-between;
+  height: 8rem;
+  align-items: center;
+  position: relative;
+  background-color: white;
+
+  .NavCategories {
+    height: 100%;
+
+    ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      font-size: 1.6rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin: 0;
+      height: 100%;
+
+      li:not(:last-child) {
+        margin-right: 3rem;
+      }
+
+      li {
+        height: 100%;
+        a {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          text-decoration: none;
+          color: inherit;
+          padding: 0 1.6rem;
+        }
+        .Selectd {
+          color: $primary_color;
+          border-bottom: 1px solid $primary_color;
+        }
+      }
+    }
+  }
+
+  .Logo {
+    img {
+      height: 3rem;
+      @media only screen and (max-width: $phone_small) {
+        display: none;
+      }
+    }
+  }
+
+  .NavOptoins {
     display: flex;
-    justify-content: space-between;
-    height: 8rem;
-    align-items: center;
-    position: relative;
-    background-color: white;
-
-
-    .NavCategories{
-        height: 100% ;
-
-        ul {
-            list-style: none;
-            display: flex;
-            padding: 0 ;
-            font-size: 1.6rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            margin: 0 ;
-            height: 100% ;
-
-
-
-
-            li:not(:last-child) {
-                margin-right: 3rem;
-            }
-
-            li {
-                height: 100%;
-                a {
-                    display: flex;
-                    align-items: center;
-                    height: 100%;
-                    text-decoration: none;
-                    color: inherit;
-                    padding: 0 1.6rem;
-                }
-                .Selectd {
-                    color: $primary_color;
-                    border-bottom: 1px solid $primary_color ;
-                }
-            }
-        }
+    div:not(:last-child) {
+      margin-right: 4rem;
+      @media only screen and (max-width: $phone_larg) {
+        margin-right: 2rem;
+      }
+      @media only screen and (max-width: $phone_small) {
+        margin-right: 0.5rem;
+      }
     }
 
+    .Currency {
+      appearance: none;
+      background-color: transparent;
+      width: 3rem;
+      border: none;
+      overflow: hidden;
 
-    .Logo {
-
-        img{
-            height: 3rem;
-            @media only screen and (max-width: $phone_small) {
-                display: none;
-              }
-        }
+      &:focus-visible {
+        outline: none !important;
+      }
     }
 
-
-    .NavOptoins {
-        display: flex;
-
-        div:not(:last-child){
-            margin-right: 4rem;
-            @media only screen and (max-width: $phone_larg) {
-                margin-right: 2rem;
-              }
-              @media only screen and (max-width: $phone_small) {
-                margin-right: .5rem;
-              }
-        }
-
-        .Currency {
-            appearance: none;
-            background-color: transparent;
-            width: 3rem;
-            border: none;
-            overflow: hidden;
-            
-            
-            &:focus-visible {
-                outline: none !important;
-            }
-        }
-
-        
-        .Cheveron {
-            position: absolute;
-            top: 2px;
-            right: 0;
-            z-index: -1;
-        }
-        
-        .Optoin{
-            position: relative;
-            svg{
-                cursor: pointer;
-            }
-        }
-
-        .CartCount {
-            position: absolute;
-            top: -9px;
-            right: -12px;
-            background-color: #1D1F22;
-            color: white;
-            width: 17px;
-            height: 17px;
-            font-size: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            font-family: "Roboto", sans-serif;
-            cursor: pointer;
-        }
+    .Cheveron {
+      position: absolute;
+      top: 2px;
+      right: 0;
+      z-index: -1;
     }
 
+    .Optoin {
+      position: relative;
+      svg {
+        cursor: pointer;
+      }
+    }
+
+    .CartCount {
+      position: absolute;
+      top: -9px;
+      right: -12px;
+      background-color: #1d1f22;
+      color: white;
+      width: 17px;
+      height: 17px;
+      font-size: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-family: "Roboto", sans-serif;
+      cursor: pointer;
+    }
+  }
 }
-
-

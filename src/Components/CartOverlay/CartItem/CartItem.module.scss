@@ -1,143 +1,130 @@
 @import "../../../global_styles.scss";
 
-
 // small scale display
 .Container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 3.5rem;
+
+  .Left {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    margin-bottom: 3.5rem;
-    
-    .Left {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        
-        .Name{
-            font-weight: 500;
-        }
-        
-        .Cat {
-            
-        }
-        
-        .Price {
-            font-weight: 500;
-            font-family: "Roboto", sans-serif;
-        }
-        
-        .Sizes {
-            display: flex;
 
-        }
+    .Name {
+      font-weight: 500;
     }
-    
-    
-    .Right {
-        display: flex;
-        
-        .AmountSec {
-            margin-right: 1rem !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            
-            .Amount {
-                font-weight: 500;
-            }
 
-        }
-        
-        .ImgWrapper {
-            img {
-                height: 12rem;
-                width: 10rem;
-            }
-        }
+    .Price {
+      font-weight: 500;
+      font-family: "Roboto", sans-serif;
     }
+
+    .Sizes {
+      display: flex;
+    }
+  }
+
+  .Right {
+    display: flex;
+
+    .AmountSec {
+      margin-right: 1rem !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .Amount {
+        font-weight: 500;
+      }
+    }
+
+    .ImgWrapper {
+      img {
+        height: 12rem;
+        width: 10rem;
+      }
+    }
+  }
 }
-
 
 // large scale display
 
 .ContainerBig {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 3.5rem;
+
+  .Left {
     display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 100%;
-    margin-bottom: 3.5rem;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 95%;
 
-    .Left {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        height: 95%;
-        
-        .Name{
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-        }
-        
-        .Cat {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .Price {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            font-family: "Roboto", sans-serif;
-
-        }
-        
-        .Sizes {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            div {
-                margin: 2rem ;
-                margin-left: 0;
-            }
-          
-        }
+    .Name {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
     }
-    
-    
-    .Right {
-        display: flex;
-        
-        .AmountSec {
-            margin-right: 3rem !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            
-            .Amount {
-                font-weight: 500;
-                font-size: 2rem;
-            }
 
+    .Cat {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .Price {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .Sizes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      div {
+        margin: 2rem;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .Right {
+    display: flex;
+
+    .AmountSec {
+      margin-right: 3rem !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .Amount {
+        font-weight: 500;
+        font-size: 2rem;
+      }
+    }
+
+    .ImgWrapper {
+      margin-right: 5rem;
+      @media only screen and (max-width: $taplet_larg) {
+        margin-right: 0rem;
+      }
+      img {
+        height: auto;
+        max-height: 30rem;
+        width: 30rem;
+        @media only screen and (max-width: $phone_larg) {
+          height: 20rem;
         }
-        
-        .ImgWrapper {
-            margin-right: 5rem;
-            @media only screen and (max-width: $taplet_larg) {
-                margin-right: 0rem;
-                }
-            img {
-                height: auto;
-                max-height: 30rem;
-                width: 30rem;
-                @media only screen and (max-width: $phone_larg) {
-                    height: 20rem;
-                }
-            }
-        }
-    }   
+      }
+    }
+  }
 }

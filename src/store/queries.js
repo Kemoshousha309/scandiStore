@@ -29,7 +29,6 @@ export const PRODUCTS_QUERY = `{
     }
 }`;
 
-
 export const ALL_CATEGORIES_QUERY = `{
   category {
     name,
@@ -60,7 +59,7 @@ export const ALL_CATEGORIES_QUERY = `{
 }`;
 
 export const product_query = (id) => {
-  return (`{
+  return `{
     product(id: "${id}"){
       id,
       name,
@@ -84,13 +83,11 @@ export const product_query = (id) => {
       },
       brand
     }
-  }`)
-}  
-
-
+  }`;
+};
 
 export const cat_query = (title) => {
-  return (`{
+  return `{
     category(input: {title: "${title}"}){
       name,
       products {
@@ -117,7 +114,5 @@ export const cat_query = (title) => {
         brand
       }
     }
-  }`)
-}  
-
-
+  }`;
+};

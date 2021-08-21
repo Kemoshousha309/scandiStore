@@ -1,28 +1,28 @@
 @import "../../global_styles.scss";
 
 .Btn {
-    @include btn;
-    @media only screen and (max-width: $phone_larg) {
-        font-size: 1.5rem;
-      }
+  @include btn;
+  @media only screen and (max-width: $phone_larg) {
+    font-size: 1.5rem;
+  }
 }
 
 .outline {
-    @include btn-outline;
+  @include btn-outline;
 }
 
 .primary {
-    @include btn-primary;
+  @include btn-primary;
 }
 
 .Amount {
-    padding: .5rem .8rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.disable{ 
-    opacity: .5;
-    cursor: not-allowed;
+.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
