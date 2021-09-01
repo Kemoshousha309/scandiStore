@@ -8,22 +8,18 @@ import { PureComponent } from "react";
 
 class CartOverlay extends PureComponent {
   render() {
-    // _p for props && _s for State
     const {
-      cart: cart_p,
-      products: products_p,
-      currency: currency_p,
-      close: close_p,
-    } = this.props;
+      props: { cart, products, currency, close },
+    } = this;
 
     const cartArr = [];
-    for (const key in cart_p) {
-      cartArr.push(cart_p[key]);
+    for (const key in cart) {
+      cartArr.push({ ...cart[key], cart_id: key });
     }
 
     // get All products
     const allProducts = [];
-    products_p.forEach((i) => {
+    products.forEach((i) => {
       allProducts.push(...i.products);
     });
 
@@ -33,7 +29,7 @@ class CartOverlay extends PureComponent {
       allProducts.forEach((p) => {
         if (i.id === p.id) {
           p.prices.forEach((c) => {
-            if (c.currency === currency_p) {
+            if (c.currency === currency) {
               prices.push(c.amount * i.amount);
             }
           });
@@ -55,18 +51,18 @@ class CartOverlay extends PureComponent {
         </div>
         <div className={style.Content}>
           {cartArr.map((i) => {
-            return <CartItem key={i.id} product={i} amount={i.amount} />;
+            return <CartItem key={i.cart_id} product={i} amount={i.amount} />;
           })}
         </div>
         <div className={style.Footer}>
           <div className={style.TotalPrice}>
             <span>Total</span>
             <span>
-              {total.toFixed(2)} {mapSymbol(currency_p)}
+              {total.toFixed(2)} {mapSymbol(currency)}
             </span>
           </div>
           <div className={style.CartActions}>
-            <Link to="/cart" onClick={close_p}>
+            <Link to="/cart" onClick={close}>
               <Btn type="outline">View bag</Btn>
             </Link>
             <Btn type="primary">check out</Btn>

@@ -3,10 +3,13 @@ import { PureComponent } from "react";
 
 class Backdrop extends PureComponent {
   render() {
-    return this.props.open ? (
+    const {
+      props: { open, clicked, color },
+    } = this;
+    return open ? (
       <div
-        onClick={this.props.clicked}
-        style={{ backgroundColor: this.props.color }}
+        onClick={clicked}
+        style={{ backgroundColor: color }}
         className={style.Backdrop}
       ></div>
     ) : null;

@@ -14,7 +14,7 @@
     padding: 0.5rem 0.9rem;
     font-size: 1.4rem;
     cursor: pointer;
-    margin-bottom: 3rem;
+    // margin-bottom: 3rem;
   }
   input:checked + .TextType {
     background-color: $black_color;
@@ -31,6 +31,8 @@
     cursor: pointer;
     margin: 1rem;
   }
+
+
 
   input:checked + .SwatchType {
     position: relative;

@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-right: 3rem;
 
     .Name {
       font-weight: 500;
@@ -22,8 +23,25 @@
       font-family: "Roboto", sans-serif;
     }
 
-    .Sizes {
+    .Atts {
+      margin-top: 2rem;
       display: flex;
+      align-items: center;
+
+      .attributeContainer{
+        height: 8rem;
+        width: 7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .attTitle{
+          text-align: center;
+          font-weight: 600;
+          font-size: 1.2rem;
+          width: 100%;
+          white-space: pre-wrap;
+        }
+      }
     }
   }
 
@@ -86,13 +104,22 @@
       font-family: "Roboto", sans-serif;
     }
 
-    .Sizes {
+    .Atts {
+      margin-top: 2rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      div {
-        margin: 2rem;
-        margin-left: 0;
+
+      .attributeContainer{
+        height: 8rem;
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-right: 3rem;
+        .attTitle{
+          width: 100%;
+          color: rgb(33, 37, 41);
+        }
       }
     }
   }

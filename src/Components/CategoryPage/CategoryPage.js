@@ -23,12 +23,16 @@ class CategoryPage extends PureComponent {
   };
 
   addCartHandler = (e, product) => {
-    const initAtt = initAttrs(product.attributes);
+    const { id, attributes } = product;
+    const {
+      props: { cart, remove_product_form_cart, history, add_product_to_cart },
+    } = this;
+    const initAtt = initAttrs(attributes);
     const structured_obj = structre_atts_options(initAtt);
     const defualt_attrs = get_defualt_options(structured_obj);
 
-    if (this.props.cart[product.id]) {
-      this.props.remove_product_form_cart(product.id);
+    if (cart[id]) {
+      remove_product_form_cart(id);
       this.setState({
         status: {
           mess: "product is removed",
@@ -52,10 +56,10 @@ class CategoryPage extends PureComponent {
     } else {
       if (Object.keys(defualt_attrs).length > 0) {
         // redirect to product page
-        this.props.history.push(`/product?id=${product.id}`);
+        history.push(`/product?id=${product.id}`);
       } else {
-        this.props.add_product_to_cart({
-          id: product.id,
+        add_product_to_cart({
+          id: id,
           atts: defualt_attrs,
         });
         this.setState({
@@ -82,24 +86,37 @@ class CategoryPage extends PureComponent {
   };
 
   componentDidMount() {
-    if (this.props.catName === "all") {
+    const {
+      props: { catName },
+    } = this;
+    if (catName === "all") {
       axios({
         data: {
           query: queries.ALL_CATEGORIES_QUERY,
         },
       })
         .then((res) => {
-          this.setState({ category: res.data.data.category });
+          const {
+            data: {
+              data: { category },
+            },
+          } = res;
+          this.setState({ category: category });
         })
         .catch((err) => console.log(err.response));
     } else {
       axios({
         data: {
-          query: queries.cat_query(this.props.catName),
+          query: queries.cat_query(catName),
         },
       })
         .then((res) => {
-          this.setState({ category: res.data.data.category });
+          const {
+            data: {
+              data: { category },
+            },
+          } = res;
+          this.setState({ category: category });
         })
         .catch((err) => console.log(err.response));
     }
@@ -107,25 +124,30 @@ class CategoryPage extends PureComponent {
 
   render() {
     let content = <Spinner1 />;
-    if (this.state.category) {
-      // _p for props && _s for State
-      const {
-        category: { products: products_s },
-        status: { type: statusType, mess: statusMess },
-      } = this.state;
 
-      const { catName: catName_p, currency: currency_p } = this.props;
+    const {
+      state: { category },
+    } = this;
+
+    if (category) {
+      const {
+        state: {
+          category: { products },
+          status: { type, mess },
+        },
+        props: { catName, currency: currency_p },
+      } = this;
 
       // prepare structured array to fit the grid
       const structuredArr = [];
-      for (let i = 0; i < products_s.length; i += 3) {
-        const slice = products_s.slice(i, i + 3);
+      for (let i = 0; i < products.length; i += 3) {
+        const slice = products.slice(i, i + 3);
         structuredArr.push(slice);
       }
 
       content = (
         <div className={style.Container}>
-          <h1>{catName_p.toUpperCase()}</h1>
+          <h1>{catName.toUpperCase()}</h1>
           <div className={style.Gallary}>
             {structuredArr.map((row, index) => {
               return (
@@ -155,9 +177,9 @@ class CategoryPage extends PureComponent {
                                 color="#fff"
                               />
                             </button>
-                            <Link to={`/product?id=${i.id}&cat=${catName_p}`}>
+                            <Link to={`/product?id=${i.id}&cat=${catName}`}>
                               <div
-                                to={`/product?id=${i.id}&cat=${catName_p}`}
+                                to={`/product?id=${i.id}&cat=${catName}`}
                                 className={style.GallaryItem}
                               >
                                 <img
@@ -177,25 +199,28 @@ class CategoryPage extends PureComponent {
                     } else {
                       column = (
                         <div className="col-sm-4" key={i.id}>
-                          <div
-                            to={`/product?id=${i.id}&cat=${catName_p}`}
-                            className={[style.GallaryItem, style.outStock].join(
-                              " "
-                            )}
-                          >
-                            <span className={style.outStockText}>
-                              out of Stock
-                            </span>
-                            <img
-                              className="img-fluid"
-                              src={i.gallery[0]}
-                              alt={i.name}
-                                ></img>
-                            <span className={style.Name}>{i.name}</span>
-                            <span className={style.Price}>
-                              {price} {mapSymbol(currency)}
-                            </span>
-                          </div>
+                          <Link to={`/product?id=${i.id}&cat=${catName}`}>
+                            <div
+                              to={`/product?id=${i.id}&cat=${catName}`}
+                              className={[
+                                style.GallaryItem,
+                                style.outStock,
+                              ].join(" ")}
+                            >
+                              <span className={style.outStockText}>
+                                out of Stock
+                              </span>
+                              <img
+                                className="img-fluid"
+                                src={i.gallery[0]}
+                                alt={i.name}
+                              ></img>
+                              <span className={style.Name}>{i.name}</span>
+                              <span className={style.Price}>
+                                {price} {mapSymbol(currency)}
+                              </span>
+                            </div>
+                          </Link>
                         </div>
                       );
                     }
@@ -205,9 +230,7 @@ class CategoryPage extends PureComponent {
               );
             })}
           </div>
-          {statusMess ? (
-            <StatusBar type={statusType}>{statusMess}</StatusBar>
-          ) : null}
+          {mess ? <StatusBar type={type}>{mess}</StatusBar> : null}
         </div>
       );
     }

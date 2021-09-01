@@ -41,7 +41,12 @@ export const req_currencies = () => {
       },
     })
       .then((res) => {
-        dispatch(set_currencies(res.data.data.currencies));
+        const {
+          data: {
+            data: { currencies },
+          },
+        } = res;
+        dispatch(set_currencies(currencies));
       })
       .catch((err) => console.log(err));
   };
@@ -54,8 +59,13 @@ export const req_categories = () => {
         query: queries.CATEGORIES_QUERY,
       },
     })
-      .then((res) => {
-        dispatch(set_categories(res.data.data.categories));
+    .then((res) => {
+        const {
+          data: {
+            data: { categories },
+          },
+        } = res;
+        dispatch(set_categories(categories));
       })
       .catch((err) => console.log(err.response));
   };
@@ -69,7 +79,12 @@ export const req_products = () => {
       },
     })
       .then((res) => {
-        dispatch(set_products(res.data.data.categories));
+        const {
+          data: {
+            data: { categories },
+          },
+        } = res;
+        dispatch(set_products(categories));
       })
       .catch((err) => console.log(err.response));
   };

@@ -16,10 +16,13 @@ class CurrencySelector extends PureComponent {
   close = () => this.setState({ show: !this.state.show });
 
   updateValue = (e) => {
+    const {
+      target: { id },
+    } = e;
     this.setState({
-      value: e.target.id,
+      value: id,
     });
-    this.props.set_currency(e.target.id);
+    this.props.set_currency(id);
     this.close();
   };
 
@@ -28,30 +31,27 @@ class CurrencySelector extends PureComponent {
   }
 
   render() {
-    let openStyle = style.hide;
-    if (this.state.show) {
-      openStyle = style.show;
-    }
+    const {
+      state: { show, value },
+      props: { currencies },
+    } = this;
 
+    let openStyle = style.hide;
     let arrowStyle = style.down;
-    if (this.state.show) {
+    if (show) {
+      openStyle = style.show;
       arrowStyle = style.up;
     }
 
     let content = <p>loading ...</p>;
 
-    // _p for props && _s for State
-    const { currencies: currencies_p } = this.props;
-
-    const { show: show_s, value: value_s } = this.state;
-
-    if (currencies_p) {
+    if (currencies) {
       content = (
         <Aux>
-          <Backdrop clicked={this.close} open={show_s} color="transparent" />
+          <Backdrop clicked={this.close} open={show} color="transparent" />
           <div className={style.Select}>
-            <button onClick={this.close} value={value_s}>
-              {mapSymbol(value_s)}
+            <button onClick={this.close} value={value}>
+              {mapSymbol(value)}
               <Icon
                 className={arrowStyle}
                 size={10}
@@ -60,10 +60,10 @@ class CurrencySelector extends PureComponent {
               />
             </button>
             <ul className={openStyle}>
-              {currencies_p.map((i) => {
+              {currencies.map((i) => {
                 return (
                   <li key={i} onClick={this.updateValue} id={i}>
-                    {mapSymbol(i)} {i}
+                    {mapSymbol(i, this.updateValue)} {i}
                   </li>
                 );
               })}
@@ -77,20 +77,20 @@ class CurrencySelector extends PureComponent {
   }
 }
 
-export const mapSymbol = (c) => {
+export const mapSymbol = (c, updateValue) => {
   switch (c) {
     case "GBP":
-      return <span>&#163;</span>;
+      return <span id={c}>&#163;</span>;
     case "AUD":
-      return <span>&#36;</span>;
+      return <span id={c}>&#36;</span>;
     case "YEN":
-      return <span>&#165;</span>;
+      return <span id={c}>&#165;</span>;
     case "RUB":
-      return <span>&#8381;</span>;
+      return <span id={c}>&#8381;</span>;
     case "JPY":
-      return <span>&#165;</span>;
+      return <span id={c}>&#165;</span>;
     default:
-      return <span>&#36;</span>;
+      return <span id={c}>&#36;</span>;
   }
 };
 

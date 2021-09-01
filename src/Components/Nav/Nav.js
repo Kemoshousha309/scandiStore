@@ -18,27 +18,30 @@ class Nav extends PureComponent {
   };
 
   cartOverlayOpenHandler = () => {
+    const {
+      state: { cartOverlayOpen, backdropOpen },
+    } = this;
     this.setState({
-      cartOverlayOpen: !this.state.cartOverlayOpen,
-      backdropOpen: !this.state.backdropOpen,
+      cartOverlayOpen: !cartOverlayOpen,
+      backdropOpen: !backdropOpen,
     });
   };
 
   render() {
+    const {
+      state: { cartOverlayOpen, backdropOpen },
+      props: { cart, categories },
+    } = this;
+
     // get number of products in cart
-    const num = Object.keys(this.props.cart).length;
+    const num = Object.keys(cart).length;
 
-    // _p for props && _s for State
-    const { backdropOpen: backdropOpen_p, cartOverlayOpen: cartOverlayOpen_p } =
-      this.state;
-
-    const { categories: categories_p } = this.props;
 
     return (
       <Aux>
         <Backdrop
           clicked={this.cartOverlayOpenHandler}
-          open={backdropOpen_p}
+          open={backdropOpen}
           color="#39374838"
         />
         <nav className={style.Nav}>
@@ -49,7 +52,7 @@ class Nav extends PureComponent {
                   All
                 </NavLink>
               </li>
-              {categories_p.map((i) => {
+              {categories.map((i) => {
                 return (
                   <li key={i.name}>
                     <NavLink activeClassName={style.Selectd} to={i.name}>
@@ -85,9 +88,9 @@ class Nav extends PureComponent {
                   {num}
                 </span>
               ) : null}
-              <DropMenu open={cartOverlayOpen_p}>
+              <DropMenu open={cartOverlayOpen}>
                 <Item>
-                  {cartOverlayOpen_p ? (
+                  {cartOverlayOpen ? (
                     <CartOverlay close={this.cartOverlayOpenHandler} />
                   ) : null}
                 </Item>

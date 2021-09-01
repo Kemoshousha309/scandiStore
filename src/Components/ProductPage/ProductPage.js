@@ -22,7 +22,12 @@ class ProductPage extends PureComponent {
   };
 
   addCartHandler = () => {
-    this.props.add_product_to_cart(this.state.product);
+    const {
+      props: { add_product_to_cart },
+      state: { product },
+    } = this;
+
+    add_product_to_cart(product);
     this.setState({
       status: {
         mess: "product is added",
@@ -46,9 +51,16 @@ class ProductPage extends PureComponent {
   };
 
   attChangeHandler = (e, id) => {
-    const value = e.target.checked;
+    const {
+      target: { checked: value },
+    } = e;
+    const {
+      state: {
+        product: { atts },
+      },
+    } = this;
     const clickedItemsId = separate(id);
-    const attsClone = { ...this.state.product.atts };
+    const attsClone = { ...atts };
     for (const key in attsClone) {
       const itemsId = separate(key);
       if (itemsId[1] === clickedItemsId[1]) {
@@ -64,32 +76,44 @@ class ProductPage extends PureComponent {
   };
 
   componentDidMount() {
-    const params = getParams(this.props.location.search);
-    console.log(params);
+    const {
+      props: {
+        location: { search },
+      },
+    } = this;
+    const params = getParams(search);
     axios({
       data: {
         query: queries.product_query(params.id),
       },
     })
       .then((res) => {
+        const {
+          data: {
+            data: { product },
+          },
+        } = res;
         this.setState({
-          productInfo: res.data.data.product,
-          displayImag: res.data.data.product.gallery[0],
+          productInfo: product,
+          displayImag: product.gallery[0],
         });
       })
       .catch((err) => console.log(err.response));
   }
 
   componentDidUpdate() {
-    if (!this.state.product && this.state.productInfo) {
-      const initAtt = initAttrs(this.state.productInfo.attributes);
+    const {
+      state: { product, productInfo },
+    } = this;
+    if (!product && productInfo) {
+      const initAtt = initAttrs(productInfo.attributes);
       let addCart = false;
       if (Object.keys(initAtt).length === 0) {
         addCart = true;
       }
       this.setState({
         product: {
-          id: this.state.productInfo.id,
+          id: productInfo.id,
           atts: initAtt,
         },
         addCart: addCart,
@@ -99,31 +123,32 @@ class ProductPage extends PureComponent {
 
   render() {
     let content = <Spinner1 />;
-    if (this.state.product && this.state.productInfo) {
-      // _p for props && _s for State
-      const { currency: currency_p } = this.props;
 
-      const {
-        addCart: addCart_s,
-        displayImag: displayImag_s,
-        status: { mess: statusMess, type: statusType },
-        productInfo: productInfo_s,
-        product: product_s,
-      } = this.state;
+    const {
+      state: {
+        product,
+        productInfo,
+        addCart,
+        displayImag,
+        status: { mess, type },
+      },
+      props: { currency: currency_p },
+    } = this;
 
-      const [currency, price] = getPrice(productInfo_s, currency_p);
+    if (product && productInfo) {
+      const [currency, price] = getPrice(productInfo, currency_p);
       content = (
         <div className={style.Container}>
           <div className={style.Left}>
             <div className={style.ImgContainer}>
-              {productInfo_s.gallery.map((i) => {
+              {productInfo.gallery.map((i) => {
                 if (i !== 0) {
                   return (
                     <img
                       onClick={() => this.setState({ displayImag: i })}
                       key={i}
                       src={i}
-                      alt={productInfo_s.name + i}
+                      alt={productInfo.name + i}
                       className={[style.Img, "img-fluid"].join(" ")}
                     ></img>
                   );
@@ -133,17 +158,17 @@ class ProductPage extends PureComponent {
               })}
             </div>
             <img
-              src={displayImag_s}
-              alt={productInfo_s.name}
+              src={displayImag}
+              alt={productInfo.name}
               className={[style.MainImg, "img-fluid"].join(" ")}
             ></img>
           </div>
           <div className={style.Right}>
             <div className={style.Header}>
-              <h1>{productInfo_s.name}</h1>
-              <span>{productInfo_s.brand}</span>
+              <h1>{productInfo.name}</h1>
+              <span>{productInfo.brand}</span>
             </div>
-            {productInfo_s.attributes.map((i) => {
+            {productInfo.attributes.map((i) => {
               return (
                 <div key={i.name} className={style.Att}>
                   <span>{i.name}:</span>
@@ -157,7 +182,7 @@ class ProductPage extends PureComponent {
                           changeHandler={this.attChangeHandler}
                           id={id}
                           value={x.value}
-                          checked={product_s.atts[id]}
+                          checked={product.atts[id]}
                         >
                           {x.displayValue}
                         </CheckBtn>
@@ -173,25 +198,21 @@ class ProductPage extends PureComponent {
                 {price} {mapSymbol(currency)}{" "}
               </span>
             </div>
-            {productInfo_s.inStock ? (
+            {productInfo.inStock ? (
               <Btn
-                disable={!addCart_s}
+                disable={!addCart}
                 onClick={this.addCartHandler}
                 width="100%"
                 type="primary"
               >
                 Add to cart
               </Btn>
-            ) : (
-              <span className={style.outStock}>out of stock</span>
-            )}
+            ) : null}
             <div className={style.Description}>
-              {ReactHtmlParser(productInfo_s.description)}
+              {ReactHtmlParser(productInfo.description)}
             </div>
           </div>
-          {statusMess ? (
-            <StatusBar type={statusType}>{statusMess}</StatusBar>
-          ) : null}
+          {mess ? <StatusBar type={type}>{mess}</StatusBar> : null}
         </div>
       );
     }

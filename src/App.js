@@ -16,18 +16,21 @@ import Spinner from "./Ui/Spinner/Spinner";
 
 class App extends PureComponent {
   componentDidMount() {
-    this.props.onLoadApp();
+    const {
+      props: { onLoadApp },
+    } = this;
+    onLoadApp();
   }
 
   render() {
     let content = <Spinner />;
 
-    const stateContent = [this.props.categories, this.props.products];
+    const {
+      props: { categories, products },
+    } = this;
+    const stateContent = [categories, products];
 
     if (stateContent.every((i) => i)) {
-      // _p for props && _s for State
-      const { products: products_p, categories: categories_p } = this.props;
-
       content = (
         <div className={style.Container}>
           <header>
@@ -36,14 +39,14 @@ class App extends PureComponent {
           <main>
             <Switch>
               <Route path="/all">
-                <CategoryPage products={products_p} catName="all" />{" "}
+                <CategoryPage products={products} catName="all" />{" "}
               </Route>
-              {categories_p.map((i) => {
+              {categories.map((i) => {
                 return (
                   <Route key={i.name} path={`/${i.name}`}>
                     <CategoryPage
                       {...this.props}
-                      products={products_p}
+                      products={products}
                       catName={i.name}
                     />{" "}
                   </Route>

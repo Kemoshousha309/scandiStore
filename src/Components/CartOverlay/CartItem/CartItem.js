@@ -21,38 +21,66 @@ class CartItem extends PureComponent {
   };
 
   increment_amount = () => {
-    this.setState({ amount: this.state.amount + 1 });
-    this.props.update_amount(this.state.amount + 1, this.props.product.id);
+    const {
+      state: { amount },
+      props: {
+        product: { cart_id },
+        update_amount,
+      },
+    } = this;
+    this.setState({ amount: amount + 1 });
+    update_amount(amount + 1, cart_id);
   };
 
   decrement_amount = () => {
-    if (this.state.amount > 1) {
-      this.setState({ amount: this.state.amount - 1 });
-      this.props.update_amount(this.state.amount - 1, this.props.product.id);
+    const {
+      state: { amount },
+      props: {
+        product: { cart_id },
+        update_amount,
+        remove_product_form_cart,
+      },
+    } = this;
+    if (amount > 1) {
+      this.setState({ amount: amount - 1 });
+      update_amount(amount - 1, cart_id);
     } else {
-      this.props.remove_product_form_cart(this.props.product.id);
+      remove_product_form_cart(cart_id);
     }
   };
 
   componentDidMount() {
-    if (this.props.product) {
+    const {
+      props: {
+        product: { id, amount },
+        product,
+      },
+    } = this;
+    if (product) {
       axios({
         data: {
-          query: queries.product_query(this.props.product.id),
+          query: queries.product_query(id),
         },
       })
         .then((res) => {
-          this.setState({ productInfo: res.data.data.product });
+          const {
+            data: {
+              data: { product },
+            },
+          } = res;
+          this.setState({ productInfo: product });
         })
         .catch((err) => console.log(err));
-      this.setState({ amount: this.props.product.amount });
+      this.setState({ amount: amount });
     }
   }
 
   static getDerivedStateFromProps(props, state) {
-    let amount = state.amount;
-    if (props.amount !== state.amount) {
-      amount = props.amount;
+    const { amount: amount_s } = state;
+    const { amount: amount_p } = props;
+    let amount = amount_s;
+    if (amount_p !== amount_s) {
+      amount = amount_p;
     }
 
     return {
@@ -62,23 +90,28 @@ class CartItem extends PureComponent {
 
   render() {
     // _p for props && _s for State
-    const { big: big_p, product: product_p, currency: currency_p } = this.props;
-
-    const { productInfo: productInfo_s } = this.state;
+    const {
+      props: {
+        big,
+        product: { atts },
+        product,
+        currency: currency_p,
+      },
+      state: { productInfo },
+    } = this;
 
     let scaleStyle = style.Container;
-    if (big_p) {
+    if (big) {
       scaleStyle = style.ContainerBig;
     }
 
     let content = <Spinner1 />;
 
-    if (product_p && productInfo_s) {
+    if (product && productInfo) {
       // get attributes options that user choose
-      const productAttrs = product_p.atts;
       const badages = [];
-      for (const key in productAttrs) {
-        if (productAttrs[key]) {
+      for (const key in atts) {
+        if (atts[key]) {
           badages.push(key);
         }
       }
@@ -90,12 +123,13 @@ class CartItem extends PureComponent {
 
       const attOptoin = [];
       badages.forEach((i) => {
-        productInfo_s.attributes.forEach((a) => {
+        productInfo.attributes.forEach((a) => {
           if (i[1] === a.id) {
             a.items.forEach((t) => {
               if (t.id === i[0]) {
                 const type = a.type;
-                attOptoin.push({ ...t, type });
+                const attTitle = a.name;
+                attOptoin.push({ ...t, type, attTitle });
               }
             });
           }
@@ -103,29 +137,33 @@ class CartItem extends PureComponent {
       });
 
       // prepare the price
-      const [currency, price] = getPrice(productInfo_s, currency_p);
+      const [currency, price] = getPrice(productInfo, currency_p);
 
       content = (
         <div className={scaleStyle}>
           <div className={style.Left}>
-            <span className={style.Name}>{productInfo_s.name}</span>
-            <span className={style.Cat}>{productInfo_s.category}</span>
+            <span className={style.Name}>{productInfo.name}</span>
+            <span className={style.Cat}>{productInfo.category}</span>
             <span className={style.Price}>
               {(price * this.state.amount).toFixed(2)} {mapSymbol(currency)}
             </span>
-            <div className={style.Sizes}>
+            <div className={style.Atts}>
               {attOptoin.map((i) => {
                 return (
-                  <CheckBtn
-                    type={i.type}
-                    key={i.id + Math.random()}
-                    changeHandler={() => {}}
-                    id={i.id}
-                    value={i.value}
-                    checked={false}
-                  >
-                    {i.displayValue}
-                  </CheckBtn>
+                  <div key={i.attTitle} className={style.attributeContainer}>
+                    <p className={style.attTitle}>{i.attTitle}</p>
+                    <CheckBtn
+                      onlyView
+                      type={i.type}
+                      key={i.id + Math.random()}
+                      changeHandler={() => {}}
+                      id={i.id}
+                      value={i.value}
+                      checked={false}
+                    >
+                      {i.displayValue}
+                    </CheckBtn>
+                  </div>
                 );
               })}
             </div>
@@ -142,10 +180,7 @@ class CartItem extends PureComponent {
               </Btn>
             </div>
             <div className={style.ImgWrapper}>
-              <img
-                src={productInfo_s.gallery[0]}
-                alt={productInfo_s.name}
-              ></img>
+              <img src={productInfo.gallery[0]} alt={productInfo.name}></img>
             </div>
           </div>
         </div>

@@ -36,10 +36,38 @@ const set_currency = (state, action) => {
 
 const add_product_to_cart = (state, action) => {
   const cart = { ...state.cart };
-  cart[action.product.id] = {
-    ...action.product,
-    amount: 1,
-  };
+  const {
+    product: { id: product_id, atts: product_atts },
+    product
+  } = action;
+
+  const sameCartProducts = [];
+  for (const key in cart) {
+    const cart_product = cart[key];
+    if (product_id === cart_product.id) {
+      sameCartProducts.push({...cart_product, cart_id: key});
+    }
+  }
+
+  
+  let isExist = false;
+  let sameAttsProduct = null
+  sameCartProducts.forEach((i) => {
+    isExist = checkSameAtts(product_atts, i.atts) || isExist;
+    if(checkSameAtts(product_atts, i.atts)){
+      sameAttsProduct = i
+    }
+  });
+  
+  const cart_id = prepareUniqueId(product_id);
+  if (!isExist) {
+    cart[cart_id] = {
+      ...product,
+      amount: 1,
+    };
+  } else {
+    cart[sameAttsProduct.cart_id].amount += 1;
+  }
 
   store_cart(cart);
   return {
@@ -50,8 +78,10 @@ const add_product_to_cart = (state, action) => {
 
 const remove_product_form_cart = (state, action) => {
   const cart = { ...state.cart };
-  delete cart[action.id];
-
+  const {
+    id
+  } = action
+  delete cart[id];
   store_cart(cart);
   return {
     ...state,
@@ -103,4 +133,18 @@ const store_cart = (cartClone) => {
   const storeTime = new Date().getTime();
   localStorage.setItem("cart_storeTime", storeTime);
   localStorage.setItem("cart", JSON.stringify(cartClone));
+};
+
+const prepareUniqueId = (str) => {
+  const rand = Math.floor(Math.random() * 100000);
+  const composite = `${str}_${rand}`;
+  return composite;
+};
+
+const checkSameAtts = (atts1, atts2) => {
+  let isTheSame = true;
+  for (const key in atts1) {
+    isTheSame = atts1[key] === atts2[key] && isTheSame;
+  }
+  return isTheSame;
 };

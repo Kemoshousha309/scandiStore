@@ -3,33 +3,42 @@ import style from "./CheckBtn.module.scss";
 
 class CheckBtn extends PureComponent {
   render() {
+    const {
+      props: { disable, type, onlyView, value, id, changeHandler, children, checked },
+    } = this;
+
     const classes = [];
-    if (this.props.disable) {
+    if (disable) {
       classes.push(style.disable);
     }
 
-    let type = style.TextType;
-    if (this.props.type === "swatch") {
-      type = style.SwatchType;
+    let btnType = style.TextType;
+    if (type === "swatch") {
+      btnType = style.SwatchType;
     }
-    classes.push(type);
+    classes.push(btnType);
+
+    let styleObj = { backgroundColor: value, cursor: "pointer" };
+    if (onlyView) {
+      styleObj.cursor = "default";
+    }
 
     return (
       <div className={style.Container}>
         <input
-          disabled={this.props.disable}
-          onChange={(e) => this.props.changeHandler(e, this.props.id)}
+          disabled={disable}
+          onChange={(e) => changeHandler(e, id)}
           type="checkbox"
-          id={this.props.id}
-          checked={this.props.checked}
-          value={this.props.value}
+          id={id}
+          checked={checked}
+          value={value}
         />
         <label
-          htmlFor={this.props.id}
-          style={{ backgroundColor: this.props.value }}
+          htmlFor={id}
           className={classes.join(" ")}
+          style={styleObj}
         >
-          {this.props.type !== "swatch" ? this.props.children : null}
+          {type !== "swatch" ? children : null}
         </label>
       </div>
     );

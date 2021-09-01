@@ -3,28 +3,32 @@ import style from "./Btn.module.scss";
 
 class Btn extends PureComponent {
   render() {
+    const {
+      props: { type, disable, width, children, onClick },
+    } = this;
+
     const classes = [style.Btn, style.outline];
-    if (this.props.type === "primary") {
+    if (type === "primary") {
       classes[1] = style.primary;
     }
-    if (this.props.type === "amount") {
+    if (type === "amount") {
       classes[2] = style.Amount;
     }
-    if (this.props.disable) {
+    if (disable) {
       classes.push(style.disable);
     }
     let inlineStyle = {};
-    if (this.props.width) {
-      inlineStyle.width = this.props.width;
+    if (width) {
+      inlineStyle.width = width;
     }
     return (
       <button
-        disabled={this.props.disable}
+        disabled={disable}
         style={inlineStyle}
-        onClick={this.props.onClick}
+        onClick={onClick}
         className={classes.join(" ")}
       >
-        {this.props.children}
+        {children}
       </button>
     );
   }

@@ -5,12 +5,13 @@ import style from "./CartPage.module.scss";
 
 class CartPage extends Component {
   render() {
-    // _p for props && _s for State
-    const { cart: cart_p } = this.props;
+    const {
+      props: { cart },
+    } = this;
 
     const cartArr = [];
-    for (const key in cart_p) {
-      cartArr.push(cart_p[key]);
+    for (const key in cart) {
+      cartArr.push({ ...cart[key], cart_id: key });
     }
 
     return (
@@ -18,7 +19,7 @@ class CartPage extends Component {
         <h1>Cart</h1>
         {cartArr.length > 0 ? (
           cartArr.map((i) => {
-            return <CartItem key={i.id} big product={i} amount={i.amount} />;
+            return <CartItem key={i.cart_id} big product={i} amount={i.amount} />;
           })
         ) : (
           <p>
