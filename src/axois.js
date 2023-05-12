@@ -2,7 +2,7 @@ const { default: axios } = require("axios");
 
 const instance = axios.create({
   // stablish my graphql on my local host
-    baseURL: "http://localhost:4000/",
+    baseURL: "https://sandi-endpoint.onrender.com/",
     timeout: 1000,
     method: "POST"
 });
